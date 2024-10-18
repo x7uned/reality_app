@@ -62,19 +62,19 @@ const LoginForm = () => {
 	})
 
 	return (
-		<div className='flex w-full'>
-			<form className='flex-col w-full' onSubmit={handleSubmit(onSubmit)}>
+		<div className='flex w-full justify-center'>
+			<form
+				className='flex-col w-full max-w-md'
+				onSubmit={handleSubmit(onSubmit)}
+			>
 				<div className='relative mb-4'>
-					<label
-						htmlFor='login'
-						className='block text-#b67a7a-700 dark:text-gray-300'
-					>
+					<label htmlFor='login' className='block text-[var(--text)]'>
 						Login:
 					</label>
 					<input
 						id='login'
 						{...register('login')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					{errors.login && (
 						<span className='text-red-400 text-sm font-bold'>
@@ -84,22 +84,19 @@ const LoginForm = () => {
 				</div>
 
 				<div className='relative mb-4'>
-					<label
-						htmlFor='password'
-						className='block text-gray-700 dark:text-gray-300'
-					>
+					<label htmlFor='password' className='block text-[var(--text)]'>
 						Password:
 					</label>
 					<input
 						id='password'
 						type={showPassword ? 'text' : 'password'}
 						{...register('password')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					<button
 						type='button'
 						onClick={() => setShowPassword(!showPassword)}
-						className='absolute right-2 top-9 text-gray-700 dark:text-gray-300'
+						className='absolute right-2 top-9 text-[var(--subtext)]'
 					>
 						{showPassword ? <FaEye /> : <FaEyeSlash />}
 					</button>
@@ -109,18 +106,17 @@ const LoginForm = () => {
 						</span>
 					)}
 				</div>
-				{<span>{error}</span>}
+				{error && <span className='text-red-400'>{error}</span>}
+
 				<div className='flex w-full justify-between items-center mt-2'>
-					<p className='text-gray-400 dark:text-gray-500'>
-						{"Don't have an account?"}
-					</p>
+					<p className='text-[var(--subtext)]'>{"Don't have an account?"}</p>
 					<Link href='/signup'>
-						<p className='ml-2 text-blue-600 dark:text-blue-400'>Sign up</p>
+						<p className='ml-2 text-[var(--second)]'>Sign up</p>
 					</Link>
 				</div>
 
 				<button
-					className='bg-[var(--third)] w-full py-2 rounded-md mt-3 text-gray-700 dark:text-gray-200'
+					className='bg-[var(--second)] w-full py-2 rounded-md mt-3 text-reverseText'
 					type='submit'
 				>
 					Sign in

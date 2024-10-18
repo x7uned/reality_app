@@ -10,8 +10,15 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				background: 'var(--background)',
-				foreground: 'var(--foreground)',
+				body: 'var(--body-bg)',
+				bg: 'var(--bg)',
+				secondBg: 'var(--second-bg)',
+				first: 'var(--first)',
+				second: 'var(--second)',
+				text: 'var(--text)',
+				reverseText: 'var(--reverse-text)',
+				subtext: 'var(--subtext)',
+				border: 'var(--border)',
 			},
 		},
 	},
