@@ -55,6 +55,7 @@ const RegisterForm = () => {
 
 			if (fetch.payload.success) {
 				setSuccess(true)
+				localStorage.setItem('notification', 'login')
 			}
 		} catch (error) {
 			console.error('Sign up failed:', error)
@@ -63,8 +64,8 @@ const RegisterForm = () => {
 
 	return (
 		<div className='flex w-full'>
-			<form onSubmit={handleSubmit(onSubmit)} className='w-full'>
-				<div className='mb-4'>
+			<form onSubmit={handleSubmit(onSubmit)} className='w-full max-w-md'>
+				<div className='relative mb-2'>
 					<label
 						htmlFor='username'
 						className='block text-gray-700 dark:text-gray-300'
@@ -74,16 +75,16 @@ const RegisterForm = () => {
 					<input
 						id='username'
 						{...register('username')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					{errors.username && (
-						<span className='text-red-400 font-bold text-sm'>
+						<span className='text-red-400 text-sm font-bold'>
 							{errors.username.message}
 						</span>
 					)}
 				</div>
 
-				<div className='mb-4'>
+				<div className='relative mb-2'>
 					<label
 						htmlFor='email'
 						className='block text-gray-700 dark:text-gray-300'
@@ -93,16 +94,16 @@ const RegisterForm = () => {
 					<input
 						id='email'
 						{...register('email')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					{errors.email && (
-						<span className='text-red-400 font-bold text-sm'>
+						<span className='text-red-400 text-sm font-bold'>
 							{errors.email.message}
 						</span>
 					)}
 				</div>
 
-				<div className='relative mb-4'>
+				<div className='relative mb-2'>
 					<label
 						htmlFor='password'
 						className='block text-gray-700 dark:text-gray-300'
@@ -111,25 +112,25 @@ const RegisterForm = () => {
 					</label>
 					<input
 						id='password'
-						type={showPassword ? 'password' : 'text'}
+						type={showPassword ? 'text' : 'password'}
 						{...register('password')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					<button
 						type='button'
 						onClick={() => setShowPassword(!showPassword)}
-						className='absolute right-2 top-9 text-gray-700 dark:text-gray-300'
+						className='absolute right-2 top-9 text-[var(--subtext)]'
 					>
-						{showPassword ? <FaEyeSlash /> : <FaEye />}
+						{showPassword ? <FaEye /> : <FaEyeSlash />}
 					</button>
 					{errors.password && (
-						<span className='text-red-400 font-bold text-sm'>
+						<span className='text-red-400 text-sm font-bold'>
 							{errors.password.message}
 						</span>
 					)}
 				</div>
 
-				<div className='relative mb-4'>
+				<div className='relative mb-2'>
 					<label
 						htmlFor='confirmPassword'
 						className='block text-gray-700 dark:text-gray-300'
@@ -138,40 +139,39 @@ const RegisterForm = () => {
 					</label>
 					<input
 						id='confirmPassword'
-						type={showConfirmPassword ? 'password' : 'text'}
+						type={showConfirmPassword ? 'text' : 'password'}
 						{...register('confirmPassword')}
-						className='w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400'
+						className='w-full p-2 border rounded border-[var(--border)] bg-[var(--bg)] text-[var(--text)] focus:outline-none focus:border-[var(--second)]'
 					/>
 					<button
 						type='button'
 						onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-						className='absolute right-2 top-9 text-gray-700 dark:text-gray-300'
+						className='absolute right-2 top-9 text-[var(--subtext)]'
 					>
-						{showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+						{showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
 					</button>
 					{errors.confirmPassword && (
-						<span className='text-red-400 font-bold text-sm'>
+						<span className='text-red-400 text-sm font-bold'>
 							{errors.confirmPassword.message}
 						</span>
 					)}
 				</div>
 
-				<div className='flex w-full justify-between items-center mt-2'>
-					<p className='text-gray-400 dark:text-gray-500'>
-						Already have an account?
-					</p>
+				<div className='flex w-full justify-between items-center mt-1'>
+					<p className='text-[var(--subtext)]'>Already have an account?</p>
 					<Link href='/signin'>
-						<p className='ml-1 text-blue-600 dark:text-blue-400'>Sign in</p>
+						<p className='ml-2 text-[var(--second)]'>Sign in</p>
 					</Link>
 				</div>
 
 				<button
-					className='bg-[var(--third)] w-full py-2 rounded-md mt-2 text-gray-700 dark:text-gray-200'
+					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
 					type='submit'
 				>
 					Sign up
 				</button>
 			</form>
+
 			<p hidden={!success} className='text-green-400'>
 				Successfully :)
 			</p>

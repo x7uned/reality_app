@@ -20,7 +20,7 @@ const ThemeChangeComponent = () => {
 		<div className='flex border border-[var(--border)] w-24 rounded-md overflow-hidden h-8'>
 			<div
 				onClick={() => setTheme('light')}
-				className={`flex hover:bg-[var(--first)] transition-colors duration-150 w-1/3 items-center justify-center ${
+				className={`flex hover:bg-[var(--first)] text-white transition-colors duration-150 w-1/3 items-center justify-center ${
 					theme === 'light' ? 'bg-blue-300' : 'bg-[var(--second)]'
 				}`}
 			>
@@ -28,7 +28,7 @@ const ThemeChangeComponent = () => {
 			</div>
 			<div
 				onClick={() => setTheme('dark')}
-				className={`flex hover:bg-[var(--first)] transition-colors duration-150 w-1/3 items-center justify-center ${
+				className={`flex hover:bg-[var(--first)] text-white transition-colors duration-150 w-1/3 items-center justify-center ${
 					theme === 'dark' ? 'bg-blue-300' : 'bg-[var(--second)]'
 				}`}
 			>
@@ -36,7 +36,7 @@ const ThemeChangeComponent = () => {
 			</div>
 			<div
 				onClick={() => setTheme('system')}
-				className={`flex hover:bg-[var(--first)] transition-colors duration-150 w-1/3 items-center justify-center ${
+				className={`flex hover:bg-[var(--first)] text-white transition-colors duration-150 w-1/3 items-center justify-center ${
 					theme === 'system' ? 'bg-blue-300' : 'bg-[var(--second)]'
 				}`}
 			>

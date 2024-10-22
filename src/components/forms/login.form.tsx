@@ -46,6 +46,7 @@ const LoginForm = () => {
 			}
 
 			if (!result?.error) {
+				localStorage.setItem('notification', '')
 				router.push('/')
 			}
 		} catch (error) {
@@ -67,8 +68,11 @@ const LoginForm = () => {
 				className='flex-col w-full max-w-md'
 				onSubmit={handleSubmit(onSubmit)}
 			>
-				<div className='relative mb-4'>
-					<label htmlFor='login' className='block text-[var(--text)]'>
+				<div className='relative mb-2'>
+					<label
+						htmlFor='login'
+						className='block text-gray-700 dark:text-gray-300'
+					>
 						Login:
 					</label>
 					<input
@@ -83,8 +87,11 @@ const LoginForm = () => {
 					)}
 				</div>
 
-				<div className='relative mb-4'>
-					<label htmlFor='password' className='block text-[var(--text)]'>
+				<div className='relative mb-2'>
+					<label
+						htmlFor='password'
+						className='block text-gray-700 dark:text-gray-300'
+					>
 						Password:
 					</label>
 					<input
@@ -108,7 +115,7 @@ const LoginForm = () => {
 				</div>
 				{error && <span className='text-red-400'>{error}</span>}
 
-				<div className='flex w-full justify-between items-center mt-2'>
+				<div className='flex w-full justify-between items-center mt-1'>
 					<p className='text-[var(--subtext)]'>{"Don't have an account?"}</p>
 					<Link href='/signup'>
 						<p className='ml-2 text-[var(--second)]'>Sign up</p>
@@ -116,7 +123,7 @@ const LoginForm = () => {
 				</div>
 
 				<button
-					className='bg-[var(--second)] w-full py-2 rounded-md mt-3 text-reverseText'
+					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
 					type='submit'
 				>
 					Sign in
