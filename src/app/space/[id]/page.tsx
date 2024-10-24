@@ -2,8 +2,8 @@
 
 import CanvasBackground from '@/components/canvas.component'
 import { useParams } from 'next/navigation'
-import { useState, useRef } from 'react'
-import { RiEraserLine, RiDeleteBinLine } from 'react-icons/ri'
+import { useRef, useState } from 'react'
+import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
 import { TbBrush } from 'react-icons/tb'
 
 const SpacePage = () => {
@@ -52,7 +52,7 @@ const SpacePage = () => {
 						id='width'
 						value={lineWidth}
 						onChange={e => setLineWidth(Number(e.target.value))}
-						className='w-12 bg-selection outline-none rounded'
+						className='w-12 pl-1 bg-selection outline-none rounded'
 					/>
 				</div>
 			</div>
@@ -64,8 +64,8 @@ const SpacePage = () => {
 				isErasing={isErasing}
 				lineWidth={lineWidth}
 			/>
-			<div className='flex justify-center items-center w-full h-screen pointer-events-none'>
-				<p>TODOLIST</p>
+			<div className='flex justify-center items-center w-full h-screen pointer-events-none z-2'>
+				<input type='text' className='bg-transparent' placeholder='Heading' />
 			</div>
 		</div>
 	)
