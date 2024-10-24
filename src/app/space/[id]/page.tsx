@@ -9,7 +9,7 @@ import { TbBrush } from 'react-icons/tb'
 const SpacePage = () => {
 	const params = useParams<{ id: string }>()
 	const [canDraw, setCanDraw] = useState(true)
-	const [color, setColor] = useState('#000000')
+	const [color, setColor] = useState('#6e62e5')
 	const [lineWidth, setLineWidth] = useState(6)
 	const [isErasing, setIsErasing] = useState(false)
 	const canvasRef = useRef<{ clearCanvas: () => void } | null>(null)
@@ -24,7 +24,7 @@ const SpacePage = () => {
 		<div className='flex'>
 			<div className='flex z-10 items-center flex-col gap-1 w-48 bg-bg fixed h-screen py-2'>
 				<p className='text-center'>Background</p>
-				<div className='gap-1 w-full justify-between px-4 flex items-center'>
+				<div className='gap-1 w-full border-b pb-2 border-border justify-between px-4 flex items-center'>
 					<TbBrush
 						className={`cursor-pointer ${canDraw ? 'text-second' : ''}`}
 						size={'20px'}

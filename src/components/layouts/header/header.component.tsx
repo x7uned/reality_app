@@ -9,6 +9,7 @@ import {
 	MdOutlineKeyboardArrowRight,
 } from 'react-icons/md'
 import ProfileComponent from './profile.component'
+import ThemeChangeComponent from '@/components/theme.component'
 
 const Header = () => {
 	const page = usePathname()
@@ -75,7 +76,10 @@ const Header = () => {
 					<MdOutlineKeyboardArrowRight />
 				</div>
 			</div>
-			<ProfileComponent />
+			<div className='flex flex-col items-center'>
+				<ThemeChangeComponent />
+				<ProfileComponent />
+			</div>
 		</div>
 	)
 }
