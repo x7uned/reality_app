@@ -1,33 +1,81 @@
+'use client'
+
+import { usePathname, useRouter } from 'next/navigation'
 import {
 	MdOutlineEditCalendar,
-	MdOutlineInsertDriveFile,
+	MdOutlineNote,
 	MdOutlineSettings,
 	MdSpaceDashboard,
+	MdOutlineKeyboardArrowRight,
 } from 'react-icons/md'
+import ProfileComponent from './profile.component'
 
 const Header = () => {
+	const page = usePathname()
+	const router = useRouter()
+
 	return (
-		<div className='flex py-2 flex-col h-screen gap-1 items-center fixed w-36 bg-bg'>
-			<div className='flex items-center cursor-pointer hover:bg-gray-100 rounded-[4px] px-2 h-12 w-5/6'>
-				<MdSpaceDashboard />
-				<p className='ml-2'>Dashboard</p>
+		<div className='flex z-10 border-r flex-col justify-between w-48 bg-bg fixed h-screen py-2 border-border'>
+			<div className='flex w-full flex-col gap-1 items-center'>
+				<div
+					onClick={() => router.push('/')}
+					className={`flex transition-all duration-300 items-center cursor-pointer hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
+						page == '/' ? 'bg-selection' : ''
+					}`}
+				>
+					<MdSpaceDashboard
+						className={`w-1/6 transition-all duration-300 ${
+							page == '/' ? 'text-second' : ''
+						}`}
+					/>
+					<p className='ml-2 w-5/6'>Dashboard</p>
+					<MdOutlineKeyboardArrowRight />
+				</div>
+				<div
+					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
+						page == '/calendar' ? 'bg-selection' : ''
+					}`}
+				>
+					<MdOutlineEditCalendar
+						className={`w-1/6 transition-all duration-300 ${
+							page == '/calendar' ? 'text-second' : ''
+						}`}
+					/>
+					<p className='ml-2 w-5/6'>Calendar</p>
+					<MdOutlineKeyboardArrowRight />
+				</div>
+				<div
+					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
+						page == '/settings' ? 'bg-selection' : ''
+					}`}
+				>
+					<MdOutlineSettings
+						className={`w-1/6 transition-all duration-300 ${
+							page == '/settings' ? 'text-second' : ''
+						}`}
+					/>
+					<p className='ml-2 w-5/6'>Settings</p>
+					<MdOutlineKeyboardArrowRight />
+				</div>
+				<p className='text-subtext w-1/3 text-center border-b border-subtext font-medium'>
+					Spaces
+				</p>
+				<div
+					onClick={() => router.push('/space/1')}
+					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
+						page.includes('space/1') ? 'bg-selection' : ''
+					}`}
+				>
+					<MdOutlineNote
+						className={`w-1/6 transition-all duration-300 ${
+							page.includes('space/1') ? 'text-second' : ''
+						}`}
+					/>
+					<p className='ml-2 w-5/6'>New space</p>
+					<MdOutlineKeyboardArrowRight />
+				</div>
 			</div>
-			<div className='flex items-center cursor-pointer hover:bg-gray-100 rounded-[4px] px-2 h-12 w-5/6'>
-				<MdOutlineEditCalendar />
-				<p className='ml-2'>Calendar</p>
-			</div>
-			<div className='flex items-center cursor-pointer hover:bg-gray-100 rounded-[4px] px-2 h-12 w-5/6'>
-				<MdOutlineSettings />
-				<p className='ml-2'>Settings</p>
-			</div>
-			<p className='text-subtext font-medium'>Spaces</p>
-			<div className='flex items-center cursor-pointer hover:bg-gray-100 rounded-[4px] px-2 h-12 w-5/6'>
-				<MdOutlineInsertDriveFile />
-				<p className='ml-2'>New space</p>
-			</div>
-			<div className='flex items-end h-full'>
-				<p>User</p>
-			</div>
+			<ProfileComponent />
 		</div>
 	)
 }

@@ -19,6 +19,7 @@ const config: Config = {
 				reverseText: 'var(--reverse-text)',
 				subtext: 'var(--subtext)',
 				border: 'var(--border)',
+				selection: 'var(--selection)',
 			},
 		},
 	},

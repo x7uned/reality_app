@@ -10,7 +10,7 @@ export default function GlobalLayout({
 	return (
 		<GlobalProvider>
 			<Header />
-			<main className='pl-64'>{children}</main>
+			<main className='pl-48'>{children}</main>
 			<NotificationBar />
 		</GlobalProvider>
 	)
