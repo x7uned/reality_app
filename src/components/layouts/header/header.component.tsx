@@ -7,6 +7,7 @@ import {
 	MdOutlineSettings,
 	MdSpaceDashboard,
 	MdOutlineKeyboardArrowRight,
+	MdEventNote,
 } from 'react-icons/md'
 import ProfileComponent from './profile.component'
 import ThemeChangeComponent from '@/components/theme.component'
@@ -58,9 +59,14 @@ const Header = () => {
 					/>
 					<p className='ml-2 w-5/6'>Settings</p>
 				</div>
-				<p className='text-subtext w-1/3 text-center border-b border-subtext font-medium'>
-					Spaces
-				</p>
+				<div className='relative flex justify-center w-2/3'>
+					<div className='absolute inset-0 flex items-center'>
+						<div className='w-full border-t border-border'></div>
+					</div>
+					<span className='bg-bg relative px-1 text-subtext'>
+						<MdEventNote />
+					</span>
+				</div>
 				<div
 					onClick={() => router.push('/space/1')}
 					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
@@ -73,7 +79,7 @@ const Header = () => {
 							page.includes('space/1') ? 'text-second' : ''
 						}`}
 					/>
-					<p className='ml-2 w-5/6'>New space</p>
+					<p className='ml-2 w-5/6'>New Space</p>
 					<MdOutlineKeyboardArrowRight
 						className={page.includes('space/1') ? '' : 'hidden'}
 					/>
