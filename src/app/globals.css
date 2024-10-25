@@ -24,7 +24,9 @@
 	--reverse-text: white;
 	--subtext: #a7a7a7;
 	--border: #e9e9e9;
-	--selection: #f3f4f6;
+	--selection: #dddddd;
+	--select: #cacaca;
+	--text-selection: #f0e3ff;
 }
 
 .dark {
@@ -38,6 +40,18 @@
 	--subtext: #d0d0d0;
 	--border: #3a3a3a;
 	--selection: #464646;
+	--select: #646464;
+	--text-selection: rgb(187, 187, 187);
+}
+
+::-moz-selection {
+	color: var(--text-selection);
+	background: var(--select);
+}
+
+::selection {
+	color: var(--text-selection);
+	background: var(--select);
 }
 
 body {
