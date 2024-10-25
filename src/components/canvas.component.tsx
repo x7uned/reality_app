@@ -92,12 +92,8 @@ const CanvasBackground = forwardRef((props: CanvasBackgroundProps, ref) => {
 			onMouseUp={finishDrawing}
 			onMouseMove={draw}
 			onMouseLeave={finishDrawing}
+			className='absolute top-0 left-0 w-full h-full'
 			style={{
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
 				zIndex: canDraw ? 4 : -1,
 			}}
 		/>

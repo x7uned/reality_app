@@ -25,12 +25,12 @@ const Header = () => {
 					}`}
 				>
 					<MdSpaceDashboard
+						size={'20px'}
 						className={`w-1/6 transition-all duration-300 ${
 							page == '/' ? 'text-second' : ''
 						}`}
 					/>
 					<p className='ml-2 w-5/6'>Dashboard</p>
-					<MdOutlineKeyboardArrowRight />
 				</div>
 				<div
 					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
@@ -38,12 +38,12 @@ const Header = () => {
 					}`}
 				>
 					<MdOutlineEditCalendar
+						size={'20px'}
 						className={`w-1/6 transition-all duration-300 ${
 							page == '/calendar' ? 'text-second' : ''
 						}`}
 					/>
 					<p className='ml-2 w-5/6'>Calendar</p>
-					<MdOutlineKeyboardArrowRight />
 				</div>
 				<div
 					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
@@ -51,12 +51,12 @@ const Header = () => {
 					}`}
 				>
 					<MdOutlineSettings
+						size={'20px'}
 						className={`w-1/6 transition-all duration-300 ${
 							page == '/settings' ? 'text-second' : ''
 						}`}
 					/>
 					<p className='ml-2 w-5/6'>Settings</p>
-					<MdOutlineKeyboardArrowRight />
 				</div>
 				<p className='text-subtext w-1/3 text-center border-b border-subtext font-medium'>
 					Spaces
@@ -68,12 +68,15 @@ const Header = () => {
 					}`}
 				>
 					<MdOutlineNote
+						size={'20px'}
 						className={`w-1/6 transition-all duration-300 ${
 							page.includes('space/1') ? 'text-second' : ''
 						}`}
 					/>
 					<p className='ml-2 w-5/6'>New space</p>
-					<MdOutlineKeyboardArrowRight />
+					<MdOutlineKeyboardArrowRight
+						className={page.includes('space/1') ? '' : 'hidden'}
+					/>
 				</div>
 			</div>
 			<div className='flex flex-col items-center'>
