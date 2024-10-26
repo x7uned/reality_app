@@ -1,122 +1,89 @@
 'use client'
 
-import { Element } from '@/app/space/[id]/page'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Element, Space } from '@/app/space/[id]/page'
+import { Dispatch, SetStateAction } from 'react'
 
 interface SpaceElementsProps {
-	space: { name: string } | undefined
+	space: Space | undefined
 	elements: Element[]
 	setElements: Dispatch<SetStateAction<Element[]>>
-	setSpace: Dispatch<
-		SetStateAction<{ id: number; background: string; name: string } | undefined>
-	>
+	changeHeading: (text: string) => void
 }
 
 const SpaceElements = ({
 	space,
-	setSpace,
+	changeHeading,
 	elements,
 	setElements,
 }: SpaceElementsProps) => {
-	const [showMenu, setShowMenu] = useState(false)
-	const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
-
 	const handleTextChange = (id: number, content: string) => {
-		setElements(prev =>
-			prev.map(element =>
+		setElements(prev => {
+			if (!prev) return prev // Возвращаем предыдущее значение, если оно undefined
+			return prev.map(element =>
 				element.id === id ? { ...element, content } : element
 			)
-		)
+		})
 	}
 
-	const handleTextSelection = (event: React.MouseEvent) => {
-		const selection = window.getSelection()
-		if (selection && selection.toString()) {
-			const { clientX: x, clientY: y } = event
-			setMenuPosition({ x, y })
-			setShowMenu(true)
-		} else {
-			setShowMenu(false)
+	const getStyles = (type: string) => {
+		switch (type) {
+			case 'h1':
+				return 'text-3xl placeholder:text-3xl h-12'
+			case 'h2':
+				return 'text-2xl placeholder:text-2xl h-10'
+			case 'h3':
+				return 'text-xl placeholder:text-xl h-8'
+			case 'h4':
+				return 'text-lg placeholder:text-lg h-8'
+			case 'h5':
+				return 'text-base placeholder:text-base h-6'
+			default:
+				return 'text-base placeholder:text-base' // стандартный стиль для текстового поля
 		}
 	}
 
-	const applyStyle = (style: 'bold' | 'italic') => {
-		document.execCommand(style)
+	const handleSelect = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
+		const target = event.target as HTMLTextAreaElement
+		const selectedText = target.value.substring(
+			target.selectionStart,
+			target.selectionEnd
+		)
+		if (selectedText.length) {
+		}
 	}
 
 	return (
 		<div className='flex justify-center py-4 items-start w-screen h-screen z-2'>
 			<div className='flex flex-col w-[1000px] px-12 justify-start items-start'>
 				<div
+					className='outline-0 w-full text-[80px] bg-transparent resize-none overflow-hidden text-center'
 					contentEditable
-					style={{ direction: 'ltr', textAlign: 'center' }}
-					className='outline-0 w-full text-[80px] bg-transparent resize-none overflow-hidden'
+					defaultValue={space?.name}
 					onInput={e =>
-						setSpace(prev =>
-							prev
-								? { ...prev, name: (e.target as HTMLDivElement).innerText }
-								: {
-										id: Date.now(),
-										background: '',
-										name: (e.target as HTMLDivElement).innerText,
-								  }
-						)
+						changeHeading(e.currentTarget.textContent || 'New Space')
 					}
-					onClick={handleTextSelection}
 					suppressContentEditableWarning={true}
-				>
-					{!space?.name && <span style={{ opacity: 0.5 }}>New Space</span>}
-					{space?.name}
-				</div>
+				></div>
+
 				{elements.map(elem => (
-					<div
-						key={elem.id}
-						className='flex w-full'
-						onClick={handleTextSelection}
-					>
-						<div
-							spellCheck={true}
+					<div key={elem.id} className='flex w-full'>
+						<textarea
 							contentEditable={true}
 							suppressContentEditableWarning={true}
 							style={{ direction: 'ltr', textAlign: 'start' }}
-							className='outline-0 w-full bg-transparent text-start resize-none overflow-hidden my-2'
-							onInput={e =>
-								handleTextChange(
-									elem.id,
-									(e.target as HTMLDivElement).innerText
-								)
-							}
-						>
-							{!elem.content && (
-								<span
-									style={{ opacity: 0.5 }}
-								>{`Start typing ${elem.type}`}</span>
-							)}
-							{elem.content}
-						</div>
+							className={`outline-0 w-full bg-transparent text-start resize-none overflow-hidden ${getStyles(
+								elem.type
+							)}`}
+							value={elem.content}
+							placeholder='type'
+							onSelect={handleSelect}
+							onChange={e => handleTextChange(elem.id, e.target.value)}
+						></textarea>
 					</div>
 				))}
-				{window.getSelection()?.type == 'Range' && (
-					<div
-						className={`absolute transition-all duration-300 ${
-							showMenu ? '' : 'opacity-0 pointer-events-none'
-						} bg-bg border rounded flex`}
-						style={{ top: menuPosition.y - 65, left: menuPosition.x }}
-					>
-						<button
-							onClick={() => applyStyle('bold')}
-							className='font-bold px-2'
-						>
-							B
-						</button>
-						<button
-							onClick={() => applyStyle('italic')}
-							className='italic px-2'
-						>
-							I
-						</button>
-					</div>
-				)}
+			</div>
+			<div className='flex absolute bottom-0 right-0'>
+				<p onClick={() => console.log(space)}>CONSOLE</p>
 			</div>
 		</div>
 	)

@@ -30,16 +30,18 @@ const SpacePage = () => {
 		background: '',
 		name: 'New Space',
 	})
-	const [space, setSpace] = useState<Space | undefined>(undefined)
+	const [space, setSpace] = useState<Space | undefined>()
 	const [needToSave, setNeedToSave] = useState(false)
 	const [elements, setElements] = useState<Element[]>([])
 	const canvasRef = useRef<{ clearCanvas: () => void } | null>(null)
 
 	const clearCanvas = () => {
-		if (canvasRef.current) {
-			canvasRef.current.clearCanvas()
-		}
+		canvasRef.current?.clearCanvas()
 	}
+
+	useEffect(() => {
+		setSpace(saveSpace)
+	}, [])
 
 	useEffect(() => {
 		const isChanged =
@@ -48,17 +50,22 @@ const SpacePage = () => {
 		setNeedToSave(isChanged)
 	}, [space, saveSpace])
 
-	useEffect(() => {
-		setSpace(saveSpace)
-	}, [])
-
 	const handleSave = () => {
 		setSaveSpace(space)
 		setNeedToSave(false)
 	}
 
+	const changeHeading = (text: string) => {
+		if (text.length > 0) {
+			setSpace(prev =>
+				prev ? { ...prev, name: text } : { id: 0, background: '', name: text }
+			)
+		}
+	}
+
 	const addElement = (type: string) => {
-		setElements(prev => [...prev, { id: Date.now(), content: '', type: type }])
+		const newElement = { id: Date.now(), content: '', type }
+		setElements(prev => [...prev, newElement])
 	}
 
 	return (
@@ -84,7 +91,7 @@ const SpacePage = () => {
 			/>
 			<SpaceElements
 				space={space}
-				setSpace={setSpace}
+				changeHeading={changeHeading}
 				elements={elements}
 				setElements={setElements}
 			/>
@@ -92,17 +99,16 @@ const SpacePage = () => {
 			<div
 				className={`flex transition-all duration-300 text-center flex-col fixed bottom-4 px-3 py-2 w-52 rounded-lg ${
 					needToSave ? 'right-6' : 'right-[-400px] pointer-events-none'
-				} bg-bg border border-border `}
+				} bg-bg border border-border`}
 			>
 				<p>Your space may be lost.</p>
 				<button
 					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
 					onClick={handleSave}
-					type='submit'
+					type='button'
 				>
 					Save
 				</button>
-				<p onClick={() => console.log(elements)}>Eele</p>
 			</div>
 		</div>
 	)
