@@ -14,38 +14,11 @@
 	}
 }
 
-.no-outline {
-	outline: none;
-	-moz-outline-style: none; /* Специфично для Firefox */
-	white-space: pre-wrap; /* Позволяет перенос текста */
-	word-wrap: break-word; /* Переносит слова по слогам, если они длинные */
-}
-
-.editable {
-	min-height: 30px; /* Минимальная высота для видимости текста */
-	white-space: normal; /* Переносит строки, как в обычном тексте */
-	word-break: break-word; /* Переносит длинные слова на следующую строку */
-}
-
-.editable {
-	position: relative;
-	min-height: 30px; /* Достаточная высота, чтобы был виден placeholder */
-}
-
-.editable:empty::before {
-	content: 'Type something...';
-	color: gray;
-	position: absolute;
-	top: 0;
-	left: 0;
-	pointer-events: none; /* Чтобы текст не мешал кликам по элементу */
-}
-
 :root {
 	--body-bg: #f5f6fb;
 	--bg: #ffffff;
 	--second-bg: #f5f6fb;
-	--first: #d3cffc;
+	--first: #eeecff;
 	--second: #6e62e5;
 	--text: #000000;
 	--reverse-text: white;
@@ -60,7 +33,7 @@
 	--body-bg: #1e1e1e;
 	--bg: #2c2c2c;
 	--second-bg: #1e1e1e;
-	--first: #4a4a72;
+	--first: #2e2e2e;
 	--second: #8a82f2;
 	--text: #ffffff;
 	--reverse-text: black;
@@ -85,6 +58,27 @@ body {
 	color: var(--text);
 	background-color: var(--body-bg);
 	border-color: (--border);
+}
+
+.no-outline {
+	outline: none;
+	-moz-outline-style: none;
+}
+
+.editable {
+	background: transparent;
+	position: relative;
+	white-space: normal; /* Переносит строки, как в обычном тексте */
+	word-break: break-word; /* Переносит длинные слова на следующую строку */
+}
+
+.editable:empty::before {
+	content: 'Type something...';
+	color: gray;
+	position: absolute;
+	top: 2;
+	left: 2;
+	pointer-events: none; /* Чтобы текст не мешал кликам по элементу */
 }
 
 /* HTML: <div class="loader"></div> */
