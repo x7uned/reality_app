@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
+import CanvasBackground from '@/components/canvas.component'
+import SpaceElements from '@/components/space/space.elements'
+import SpaceHeader from '@/components/space/space.header'
 import { useParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import CanvasBackground from '@/components/canvas.component'
-import SpaceHeader from '@/components/space/space.header'
-import SpaceElements from '@/components/space/space.elements'
 
 export interface Space {
 	id: number

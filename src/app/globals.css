@@ -14,6 +14,33 @@
 	}
 }
 
+.no-outline {
+	outline: none;
+	-moz-outline-style: none; /* Специфично для Firefox */
+	white-space: pre-wrap; /* Позволяет перенос текста */
+	word-wrap: break-word; /* Переносит слова по слогам, если они длинные */
+}
+
+.editable {
+	min-height: 30px; /* Минимальная высота для видимости текста */
+	white-space: normal; /* Переносит строки, как в обычном тексте */
+	word-break: break-word; /* Переносит длинные слова на следующую строку */
+}
+
+.editable {
+	position: relative;
+	min-height: 30px; /* Достаточная высота, чтобы был виден placeholder */
+}
+
+.editable:empty::before {
+	content: 'Type something...';
+	color: gray;
+	position: absolute;
+	top: 0;
+	left: 0;
+	pointer-events: none; /* Чтобы текст не мешал кликам по элементу */
+}
+
 :root {
 	--body-bg: #f5f6fb;
 	--bg: #ffffff;
