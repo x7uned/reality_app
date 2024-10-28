@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { Element, Space } from '@/app/space/[id]/page'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { FaBold, FaItalic, FaUnderline, FaPalette } from 'react-icons/fa6'
 
 interface SpaceElementsProps {
 	space: Space | undefined
@@ -16,9 +18,68 @@ const SpaceElements = ({
 	elements,
 	setElements,
 }: SpaceElementsProps) => {
+	const [isMenuVisible, setMenuVisible] = useState(false)
+	const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
+	const editableRefs = useRef<(HTMLDivElement | null)[]>([])
+
+	const [isBold, setIsBold] = useState(false)
+	const [isItalic, setIsItalic] = useState(false)
+	const [isUnderline, setIsUnderline] = useState(false)
+	const [selectedColor, setSelectedColor] = useState('#000000') // Default color
+
+	const checkStyleState = () => {
+		const selection = window.getSelection()
+		if (selection && selection.rangeCount > 0) {
+			setIsBold(document.queryCommandState('bold'))
+			setIsItalic(document.queryCommandState('italic'))
+			setIsUnderline(document.queryCommandState('underline'))
+		}
+	}
+
+	const handleTextSelection = () => {
+		const selection = window.getSelection()
+		if (selection && selection.rangeCount > 0) {
+			const range = selection.getRangeAt(0)
+			const selectedNode = range.commonAncestorContainer
+
+			const isInsideEditable = editableRefs.current.some(ref =>
+				ref?.contains(selectedNode as Node)
+			)
+
+			if (isInsideEditable && selection.toString().length > 0) {
+				const { x, y, height } = range.getBoundingClientRect()
+				setMenuPosition({ x, y: y + height })
+				setMenuVisible(true)
+				checkStyleState()
+			} else {
+				setMenuVisible(false)
+			}
+		} else {
+			setMenuVisible(false)
+		}
+	}
+
+	const applyStyle = (command: string) => {
+		document.execCommand(command)
+		checkStyleState()
+	}
+
+	const applyColor = (color: string) => {
+		document.execCommand('foreColor', false, color)
+		setSelectedColor(color) // Update the selected color state
+		checkStyleState()
+	}
+
+	const handleCheckIsEmpty = (e: React.SyntheticEvent<HTMLDivElement>) => {
+		const target = e.currentTarget as HTMLDivElement
+		if (target.innerHTML === '<br>') {
+			target.innerHTML = ''
+		}
+	}
+
 	const handleTextChange = (id: number, content: string) => {
 		setElements(prev => {
-			if (!prev) return prev // Возвращаем предыдущее значение, если оно undefined
+			if (!prev) return prev
 			return prev.map(element =>
 				element.id === id ? { ...element, content } : element
 			)
@@ -38,33 +99,22 @@ const SpaceElements = ({
 			case 'h5':
 				return 'text-base'
 			default:
-				return 'text-base' // стандартный стиль для текстового поля
+				return 'text-base'
 		}
 	}
 
-	// const handleSelect = (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
-	// 	const target = event.target as HTMLTextAreaElement
-	// 	const selectedText = target.value.substring(
-	// 		target.selectionStart,
-	// 		target.selectionEnd
-	// 	)
-	// 	if (selectedText.length) {
-	// 	}
-	// }
-
-	const handleMouseUp = () => {
-		const selection = window.getSelection()?.toString()
-		if (selection && selection?.length > 0) {
-			console.log(selection)
-		}
+	const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+		e.preventDefault()
+		const text = e.clipboardData.getData('text/plain')
+		document.execCommand('insertText', false, text)
 	}
 
-	const handleCheckIsEmpty = (e: React.SyntheticEvent<HTMLDivElement>) => {
-		const target = e.currentTarget as HTMLDivElement
-		if (target.innerHTML === '<br>') {
-			target.innerHTML = ''
+	useEffect(() => {
+		document.addEventListener('click', handleTextSelection)
+		return () => {
+			document.removeEventListener('click', handleTextSelection)
 		}
-	}
+	}, [])
 
 	return (
 		<div className='flex justify-center py-4 pl-48 items-start w-full h-screen z-2'>
@@ -74,15 +124,18 @@ const SpaceElements = ({
 					aria-multiline='true'
 					className='no-outline content editable placeholder w-full text-[50px] bg-transparent resize-none text-center'
 					contentEditable
+					ref={el => {
+						editableRefs.current[0] = el
+					}}
 					onInput={e => {
 						changeHeading(e.currentTarget.textContent || 'New Space')
 						handleCheckIsEmpty(e)
 					}}
-					onMouseUp={handleMouseUp}
+					onPaste={handlePaste}
 					suppressContentEditableWarning={true}
 				></div>
 
-				{elements.map(elem => (
+				{elements.map((elem: Element, index) => (
 					<div key={elem.id} className='flex w-full max-w-full'>
 						<div
 							role='textbox'
@@ -92,8 +145,9 @@ const SpaceElements = ({
 							className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
 								elem.type
 							)}`}
-							onClick={e => console.log(e.currentTarget.innerHTML)}
-							onMouseUp={handleMouseUp}
+							ref={el => {
+								editableRefs.current[index + 1] = el
+							}}
 							onInput={e => {
 								handleTextChange(
 									elem.id,
@@ -101,12 +155,46 @@ const SpaceElements = ({
 								)
 								handleCheckIsEmpty(e)
 							}}
+							onPaste={handlePaste}
 						></div>
 					</div>
 				))}
 			</div>
-			<div className='flex absolute bottom-0 right-0'>
-				<p onClick={() => console.log(space)}>CONSOLE</p>
+			<div
+				style={{
+					top: menuPosition.y,
+					left: menuPosition.x,
+				}}
+				className={`menu ${
+					isMenuVisible ? '' : 'opacity-0 pointer-events-none'
+				} flex items-center transition-opacity duration-150 absolute bg-bg border-border border rounded-md`}
+			>
+				<button
+					onClick={() => applyStyle('bold')}
+					className={`${isBold ? 'text-second' : 'text-text'} pl-2 py-2 px-1`}
+				>
+					<FaBold size='20px' />
+				</button>
+				<button
+					onClick={() => applyStyle('italic')}
+					className={`${isItalic ? 'text-second' : 'text-text'} py-2 px-1`}
+				>
+					<FaItalic size='20px' />
+				</button>
+				<button
+					onClick={() => applyStyle('underline')}
+					className={`${
+						isUnderline ? 'text-second' : 'text-text'
+					} py-2 px-1 pr-2`}
+				>
+					<FaUnderline size='20px' />
+				</button>
+				<input
+					type='color'
+					value={selectedColor}
+					onChange={e => applyColor(e.target.value)}
+					className='w-8 h-8 cursor-pointer'
+				/>
 			</div>
 		</div>
 	)
