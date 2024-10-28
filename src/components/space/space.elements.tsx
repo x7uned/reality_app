@@ -52,6 +52,13 @@ const SpaceElements = ({
 	// 	}
 	// }
 
+	const handleMouseUp = () => {
+		const selection = window.getSelection()?.toString()
+		if (selection && selection?.length > 0) {
+			console.log(selection)
+		}
+	}
+
 	const handleCheckIsEmpty = (e: React.SyntheticEvent<HTMLDivElement>) => {
 		const target = e.currentTarget as HTMLDivElement
 		if (target.innerHTML === '<br>') {
@@ -71,6 +78,7 @@ const SpaceElements = ({
 						changeHeading(e.currentTarget.textContent || 'New Space')
 						handleCheckIsEmpty(e)
 					}}
+					onMouseUp={handleMouseUp}
 					suppressContentEditableWarning={true}
 				></div>
 
@@ -84,6 +92,8 @@ const SpaceElements = ({
 							className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
 								elem.type
 							)}`}
+							onClick={e => console.log(e.currentTarget.innerHTML)}
+							onMouseUp={handleMouseUp}
 							onInput={e => {
 								handleTextChange(
 									elem.id,
