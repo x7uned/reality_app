@@ -28,17 +28,17 @@ const SpaceElements = ({
 	const getStyles = (type: string) => {
 		switch (type) {
 			case 'h1':
-				return 'text-3xl placeholder:text-3xl'
+				return 'text-3xl'
 			case 'h2':
-				return 'text-2xl placeholder:text-2xl'
+				return 'text-2xl'
 			case 'h3':
-				return 'text-xl placeholder:text-xl'
+				return 'text-xl'
 			case 'h4':
-				return 'text-lg placeholder:text-lg'
+				return 'text-lg'
 			case 'h5':
-				return 'text-base placeholder:text-base'
+				return 'text-base'
 			default:
-				return 'text-base placeholder:text-base' // стандартный стиль для текстового поля
+				return 'text-base' // стандартный стиль для текстового поля
 		}
 	}
 
@@ -65,11 +65,12 @@ const SpaceElements = ({
 				<div
 					role='textbox'
 					aria-multiline='true'
-					className='no-outline w-full text-[80px] bg-transparent resize-none overflow-hidden text-center'
+					className='no-outline content editable placeholder w-full text-[50px] bg-transparent resize-none text-center'
 					contentEditable
-					onInput={e =>
+					onInput={e => {
 						changeHeading(e.currentTarget.textContent || 'New Space')
-					}
+						handleCheckIsEmpty(e)
+					}}
 					suppressContentEditableWarning={true}
 				></div>
 
@@ -80,7 +81,7 @@ const SpaceElements = ({
 							aria-multiline='true'
 							contentEditable={true}
 							suppressContentEditableWarning={true}
-							className={`no-outline focus:shadow dark:shadow-none bg-bg editable dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
+							className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
 								elem.type
 							)}`}
 							onInput={e => {

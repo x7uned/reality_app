@@ -72,12 +72,17 @@ body {
 	word-break: break-word; /* Переносит длинные слова на следующую строку */
 }
 
-.editable:empty::before {
+.content:empty::before {
+	content: 'New Space' !important;
+	left: 36% !important;
+}
+
+.placeholder:empty::before {
 	content: 'Type something...';
 	color: gray;
 	position: absolute;
 	top: 2;
-	left: 2;
+	left: 1;
 	pointer-events: none; /* Чтобы текст не мешал кликам по элементу */
 }
 
