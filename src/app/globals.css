@@ -17,6 +17,7 @@
 :root {
 	--body-bg: #f5f6fb;
 	--bg: #ffffff;
+	--bg2: #f0f0f0;
 	--second-bg: #f5f6fb;
 	--first: #eeecff;
 	--second: #6e62e5;
@@ -32,6 +33,7 @@
 .dark {
 	--body-bg: #1e1e1e;
 	--bg: #2c2c2c;
+	--bg2: #313131;
 	--second-bg: #1e1e1e;
 	--first: #2e2e2e;
 	--second: #8a82f2;
@@ -75,6 +77,14 @@ body {
 .content:empty::before {
 	content: 'New Space' !important;
 	left: 36% !important;
+}
+
+.placecenter:empty::before {
+	text-align: center;
+}
+
+.placeright:empty::before {
+	left: 71% !important;
 }
 
 .placeholder:empty::before {

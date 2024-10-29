@@ -120,7 +120,7 @@ const SpaceElements = ({
 	}, [])
 
 	return (
-		<div className='flex justify-center py-4 pl-48 items-start w-full h-screen z-2'>
+		<div className='flex justify-center py-4 pl-44 items-start w-full h-screen z-2'>
 			<div className='flex flex-col w-[1000px] gap-1 px-12 justify-start items-start'>
 				<div
 					role='textbox'
