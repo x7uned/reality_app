@@ -1,9 +1,12 @@
+// src/components/space/SpaceElements.tsx
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { Element, Space } from '@/app/space/[id]/page'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { FaBold, FaItalic, FaUnderline, FaPalette } from 'react-icons/fa6'
+import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
+import SpaceElement from './space.element'
 
 interface SpaceElementsProps {
 	space: Space | undefined
@@ -66,7 +69,7 @@ const SpaceElements = ({
 
 	const applyColor = (color: string) => {
 		document.execCommand('foreColor', false, color)
-		setSelectedColor(color) // Update the selected color state
+		setSelectedColor(color)
 		checkStyleState()
 	}
 
@@ -135,31 +138,20 @@ const SpaceElements = ({
 					suppressContentEditableWarning={true}
 				></div>
 
-				{elements.map((elem: Element, index) => (
-					<div key={elem.id} className='flex w-full max-w-full'>
-						<div
-							role='textbox'
-							aria-multiline='true'
-							contentEditable={true}
-							suppressContentEditableWarning={true}
-							className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
-								elem.type
-							)}`}
-							ref={el => {
-								editableRefs.current[index + 1] = el
-							}}
-							onInput={e => {
-								handleTextChange(
-									elem.id,
-									e.currentTarget.textContent || 'New Text'
-								)
-								handleCheckIsEmpty(e)
-							}}
-							onPaste={handlePaste}
-						></div>
-					</div>
+				{elements.map((elem, index) => (
+					<SpaceElement
+						key={elem.id}
+						elem={elem}
+						index={index}
+						editableRefs={editableRefs}
+						handleTextChange={handleTextChange}
+						handleCheckIsEmpty={handleCheckIsEmpty}
+						handlePaste={handlePaste}
+						getStyles={getStyles}
+					/>
 				))}
 			</div>
+
 			<div
 				style={{
 					top: menuPosition.y,
