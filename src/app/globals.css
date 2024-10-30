@@ -76,15 +76,21 @@ body {
 
 .content:empty::before {
 	content: 'New Space' !important;
-	left: 36% !important;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .placecenter:empty::before {
-	text-align: center;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 }
 
 .placeright:empty::before {
-	left: 71% !important;
+	width: 100%;
+	display: flex;
+	justify-content: end;
 }
 
 .placeholder:empty::before {

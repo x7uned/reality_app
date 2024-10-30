@@ -101,7 +101,7 @@ const SpacePage = () => {
 					needToSave ? 'right-6' : 'right-[-400px] pointer-events-none'
 				} bg-bg border border-border`}
 			>
-				<p>Your space may be lost.</p>
+				<p onClick={() => console.log(elements)}>Your space may be lost.</p>
 				<button
 					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
 					onClick={handleSave}

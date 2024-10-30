@@ -65,16 +65,16 @@ const SpaceElement = ({
 			<div
 				onMouseEnter={() => setHoverButton(true)}
 				onMouseLeave={() => setHoverButton(false)}
-				className='flex relative w-full max-w-full items-center'
+				className='flex relative w-full justify-center items-center'
 			>
 				<AnimatePresence>
 					{settingsMenu && (
 						<motion.div
-							initial={{ opacity: 0, x: 20 }}
-							animate={{ opacity: 1, x: 0 }}
-							exit={{ opacity: 0, x: 20 }}
+							initial={{ opacity: 0, y: 0 }}
+							animate={{ opacity: 1, y: 20 }}
+							exit={{ opacity: 0, y: 0 }}
 							transition={{ duration: 0.2 }}
-							className='flex flex-col gap-1 cursor-pointer absolute left-[-270px] z-20 w-64 bg-bg p-1 rounded-lg shadow-md settings-menu'
+							className='flex flex-col gap-1 cursor-pointer absolute left-[-80px] z-20 w-64 bg-bg p-1 rounded-lg shadow-md settings-menu'
 						>
 							<div className='flex px-2 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'>
 								<div className='flex items-center'>
@@ -129,7 +129,7 @@ const SpaceElement = ({
 				</AnimatePresence>
 				<div
 					onClick={() => setSettingsMenu(true)}
-					className={`flex mr-2 hover:bg-bg hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all ${
+					className={`flex left-24 mr-2 hover:bg-bg hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all ${
 						hoverButton ? '' : 'opacity-0 pointer-events-none'
 					}`}
 				>
@@ -140,14 +140,14 @@ const SpaceElement = ({
 					aria-multiline='true'
 					contentEditable={true}
 					suppressContentEditableWarning={true}
-					className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 rounded-md w-full text-start resize-none ${getStyles(
+					className={`no-outline focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 mr-10 rounded-md w-2/3 text-start resize-none ${getStyles(
 						elem.type
 					)}`}
 					ref={el => {
 						editableRefs.current[index + 1] = el
 					}}
 					onInput={e => {
-						handleTextChange(elem.id, e.currentTarget.textContent || 'New Text')
+						handleTextChange(elem.id, e.currentTarget.innerHTML || 'New Text')
 						handleCheckIsEmpty(e)
 					}}
 					onPaste={handlePaste}

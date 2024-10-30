@@ -1,4 +1,4 @@
-// components/SpaceHeader.tsx
+import { HexColorPicker } from 'react-colorful'
 import { TbBrush } from 'react-icons/tb'
 import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
 import {
@@ -8,6 +8,7 @@ import {
 	LuHeading4,
 	LuHeading5,
 } from 'react-icons/lu'
+import { useEffect, useState } from 'react'
 
 interface SpaceHeaderProps {
 	canDraw: boolean
@@ -34,38 +35,74 @@ const SpaceHeader = ({
 	setLineWidth,
 	addElement,
 }: SpaceHeaderProps) => {
+	const [picker, setPicker] = useState(false)
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as HTMLElement
+			if (picker && !target.closest('.picker')) {
+				setPicker(false)
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [picker])
+
 	return (
-		<div className='flex z-10 items-center flex-col gap-1 w-48 bg-bg fixed h-screen py-2'>
+		<div className='flex z-10 items-center flex-col gap-1 w-56 bg-bg fixed h-screen py-2'>
 			<p className='text-center'>Background</p>
 			<div className='gap-1 w-full border-b pb-2 border-border justify-between px-4 flex items-center'>
-				<TbBrush
-					className={`cursor-pointer ${canDraw ? 'text-second' : ''}`}
-					size={'20px'}
+				<div
 					onClick={() => setCanDraw(!canDraw)}
-				/>
-				<RiDeleteBinLine
-					className='cursor-pointer'
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<TbBrush
+						className={`${canDraw ? 'text-second' : ''}`}
+						size={'20px'}
+					/>
+				</div>
+				<div
 					onClick={clearCanvas}
-				/>
-				<RiEraserLine
-					className={`cursor-pointer ${isErasing ? 'text-second' : ''}`}
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<RiDeleteBinLine className='cursor-pointer' size={'20px'} />
+				</div>
+				<div
 					onClick={() => setIsErasing(!isErasing)}
-				/>
-				<input
-					type='color'
-					id='colorPicker'
-					value={color}
-					onChange={e => setColor(e.target.value)}
-					className='w-6 rounded'
-				/>
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<RiEraserLine
+						className={`cursor-pointer ${isErasing ? 'text-second' : ''}`}
+						size={'20px'}
+					/>
+				</div>
+
+				<>
+					<div
+						onClick={() => setPicker(!picker)}
+						className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+					>
+						<div
+							className='flex h-6 w-6 rounded-md '
+							style={{ backgroundColor: color }}
+						></div>
+					</div>
+					<div
+						className={`absolute picker top-20 transition-all duration-200 ${
+							picker ? '' : 'opacity-0 pointer-events-none'
+						}`}
+					>
+						<HexColorPicker color={color} onChange={setColor} />
+					</div>
+				</>
 				<input
 					type='number'
 					id='width'
 					value={lineWidth}
 					onChange={e => setLineWidth(Number(e.target.value))}
-					className='w-12 pl-1 bg-selection outline-none rounded'
+					className='w-8 h-8 bg-selection pl-1 outline-none rounded'
 				/>
 			</div>
 			<p className='text-center'>Blocks</p>

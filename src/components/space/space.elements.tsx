@@ -75,7 +75,10 @@ const SpaceElements = ({
 
 	const handleCheckIsEmpty = (e: React.SyntheticEvent<HTMLDivElement>) => {
 		const target = e.currentTarget as HTMLDivElement
-		if (target.innerHTML === '<br>') {
+		if (
+			target.innerHTML.trim() === '<br>' ||
+			target.innerHTML.trim() === '<div><br></div>'
+		) {
 			target.innerHTML = ''
 		}
 	}
@@ -92,17 +95,17 @@ const SpaceElements = ({
 	const getStyles = (type: string) => {
 		switch (type) {
 			case 'h1':
-				return 'text-3xl'
+				return 'text-3xl min-h-12'
 			case 'h2':
-				return 'text-2xl'
+				return 'text-2xl min-h-10'
 			case 'h3':
-				return 'text-xl'
+				return 'text-xl min-h-10'
 			case 'h4':
-				return 'text-lg'
+				return 'text-lg min-h-8'
 			case 'h5':
-				return 'text-base'
+				return 'text-base min-h-8'
 			default:
-				return 'text-base'
+				return 'text-base min-h-6'
 		}
 	}
 
@@ -120,12 +123,12 @@ const SpaceElements = ({
 	}, [])
 
 	return (
-		<div className='flex justify-center py-4 pl-44 items-start w-full h-screen z-2'>
-			<div className='flex flex-col w-[1000px] gap-1 px-12 justify-start items-start'>
+		<div className='flex justify-center py-4 pl-72 items-start w-full h-screen z-2'>
+			<div className='flex flex-col w-full gap-1 px-12 justify-start items-center'>
 				<div
 					role='textbox'
 					aria-multiline='true'
-					className='no-outline content editable placeholder w-full text-[50px] bg-transparent resize-none text-center'
+					className='no-outline min-h-20 w-2/3 content editable placeholder text-[50px] bg-transparent resize-none text-center'
 					contentEditable
 					ref={el => {
 						editableRefs.current[0] = el
