@@ -68,6 +68,10 @@ const SpacePage = () => {
 		setElements(prev => [...prev, newElement])
 	}
 
+	const removeElement = (id: number) => {
+		setElements(prev => prev.filter(element => element.id !== id))
+	}
+
 	return (
 		<div className='flex'>
 			<SpaceHeader
@@ -94,6 +98,7 @@ const SpacePage = () => {
 				changeHeading={changeHeading}
 				elements={elements}
 				setElements={setElements}
+				removeElement={removeElement}
 			/>
 
 			<div

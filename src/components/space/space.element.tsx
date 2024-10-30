@@ -18,6 +18,7 @@ interface SpaceElementProps {
 	handleCheckIsEmpty: (e: React.SyntheticEvent<HTMLDivElement>) => void
 	handlePaste: (e: React.ClipboardEvent<HTMLDivElement>) => void
 	getStyles: (type: string) => string
+	removeElement: (id: number) => void
 }
 
 const SpaceElement = ({
@@ -28,6 +29,7 @@ const SpaceElement = ({
 	handleCheckIsEmpty,
 	handlePaste,
 	getStyles,
+	removeElement,
 }: SpaceElementProps) => {
 	const [settingsMenu, setSettingsMenu] = useState(false)
 	const [hoverButton, setHoverButton] = useState(false)
@@ -76,7 +78,13 @@ const SpaceElement = ({
 							transition={{ duration: 0.2 }}
 							className='flex flex-col gap-1 cursor-pointer absolute left-[-80px] z-20 w-64 bg-bg p-1 rounded-lg shadow-md settings-menu'
 						>
-							<div className='flex px-2 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'>
+							<div
+								onClick={() => {
+									removeElement(elem.id)
+									setSettingsMenu(false)
+								}}
+								className='flex px-2 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'
+							>
 								<div className='flex items-center'>
 									<div className='w-6'>
 										<MdDeleteOutline size='20px' />
