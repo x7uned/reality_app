@@ -11,9 +11,14 @@ interface SpaceElementsProps {
 	setElements: (elements: Element[]) => void
 	changeHeading: (text: string) => void
 	removeElement: (id: number) => void
+	changeTypeElement: (
+		id: number,
+		newType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
+	) => void
 }
 
 const SpaceElements = ({
+	changeTypeElement,
 	changeHeading,
 	elements,
 	setElements,
@@ -200,54 +205,66 @@ const SpaceElements = ({
 					isMenuVisible ? '' : 'opacity-0 pointer-events-none'
 				} flex items-center transition-opacity duration-150 absolute bg-bg border-border border rounded-md`}
 			>
-				<button
+				<div
 					onClick={() => {
 						applyStyle('bold')
 						console.log(selectedColor)
 					}}
-					className={`${isBold ? 'text-second' : 'text-text'} pl-2 py-2 px-1`}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
-					<FaBold size='20px' />
-				</button>
-				<button
+					<button
+						className={`${isBold ? 'text-second' : 'text-text'} pl-2 py-2 px-1`}
+					>
+						<FaBold size='20px' />
+					</button>
+				</div>
+
+				<div
 					onClick={() => applyStyle('italic')}
-					className={`${isItalic ? 'text-second' : 'text-text'} py-2 px-1`}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
-					<FaItalic size='20px' />
-				</button>
-				<button
+					<button
+						className={`${isItalic ? 'text-second' : 'text-text'} py-2 px-1`}
+					>
+						<FaItalic size='20px' />
+					</button>
+				</div>
+
+				<div
 					onClick={() => applyStyle('underline')}
-					className={`${
-						isUnderline ? 'text-second' : 'text-text'
-					} py-2 px-1 pr-2`}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
-					<FaUnderline size='20px' />
-				</button>
-				<>
-					<div
-						onClick={() => setPicker(!picker)}
-						onMouseDown={e => e.preventDefault()}
-						className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+					<button
+						className={`${isUnderline ? 'text-second' : 'text-text'} py-2 px-1`}
 					>
-						<div
-							className={`flex h-6 w-6 rounded-md`}
-							style={{ backgroundColor: selectedColor }}
-						></div>
-					</div>
+						<FaUnderline size='20px' />
+					</button>
+				</div>
+
+				<div
+					onClick={() => setPicker(!picker)}
+					onMouseDown={e => e.preventDefault()}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
 					<div
-						onMouseDown={e => e.preventDefault()}
-						className={`absolute top-20 transition-all duration-200 ${
-							picker ? '' : 'opacity-0 pointer-events-none'
-						}`}
-					>
-						<div ref={pickerRef} className='flex'>
-							<HexColorPicker
-								color={selectedColor}
-								onChange={e => applyColor(e)}
-							/>
-						</div>
+						className='flex h-6 w-6 rounded-md'
+						style={{ backgroundColor: selectedColor }}
+					></div>
+				</div>
+
+				<div
+					onMouseDown={e => e.preventDefault()}
+					className={`absolute top-20 transition-all duration-200 ${
+						picker ? '' : 'opacity-0 pointer-events-none'
+					}`}
+				>
+					<div ref={pickerRef} className='flex'>
+						<HexColorPicker
+							color={selectedColor}
+							onChange={e => applyColor(e)}
+						/>
 					</div>
-				</>
+				</div>
 			</div>
 		</div>
 	)

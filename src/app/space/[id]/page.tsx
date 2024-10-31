@@ -50,10 +50,7 @@ const SpacePage = () => {
 	}, [saveSpace])
 
 	useEffect(() => {
-		const isChanged =
-			space.name !== saveSpace.name ||
-			space.background !== saveSpace.background ||
-			JSON.stringify(space.elements) !== JSON.stringify(saveSpace.elements)
+		const isChanged = JSON.stringify(space) !== JSON.stringify(saveSpace)
 		setNeedToSave(isChanged)
 	}, [space, saveSpace])
 
@@ -70,6 +67,18 @@ const SpacePage = () => {
 					: { id: 0, background: '', name: text, elements: [] }
 			)
 		}
+	}
+
+	const changeTypeElement = (
+		id: number,
+		newType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
+	) => {
+		setSpace(prev => ({
+			...prev,
+			elements: prev.elements.map(element =>
+				element.id === id ? { ...element, type: newType } : element
+			),
+		}))
 	}
 
 	const addElement = (type: string) => {
@@ -118,6 +127,7 @@ const SpacePage = () => {
 				lineWidth={lineWidth}
 			/>
 			<SpaceElements
+				changeTypeElement={changeTypeElement}
 				changeHeading={changeHeading}
 				elements={space?.elements}
 				setElements={setElements}
@@ -129,9 +139,7 @@ const SpacePage = () => {
 					needToSave ? 'right-6' : 'right-[-400px] pointer-events-none'
 				} bg-bg border border-border`}
 			>
-				<p onClick={() => console.log(space?.elements)}>
-					Your space may be lost.
-				</p>
+				<p onClick={() => console.log(space)}>Your space may be lost.</p>
 				<button
 					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
 					onClick={handleSave}
