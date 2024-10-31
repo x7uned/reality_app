@@ -1,7 +1,7 @@
 'use client'
 
 import { Element } from '@/app/space/[id]/page'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MdDeleteOutline, MdOutlineLineStyle } from 'react-icons/md'
 import {
 	CiTextAlignCenter,
@@ -33,6 +33,8 @@ const SpaceElement = ({
 }: SpaceElementProps) => {
 	const [settingsMenu, setSettingsMenu] = useState(false)
 	const [hoverButton, setHoverButton] = useState(false)
+	const editableRef = useRef<HTMLDivElement | null>(null)
+
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as HTMLElement
@@ -45,6 +47,23 @@ const SpaceElement = ({
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
 	}, [settingsMenu])
+
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (
+				event.key === 'Delete' &&
+				document.activeElement === editableRef.current
+			) {
+				removeElement(elem.id)
+				event.preventDefault()
+			}
+		}
+
+		document.addEventListener('keydown', handleKeyDown)
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown)
+		}
+	}, [elem.id, removeElement])
 
 	const handleTextAlign = (align: 'left' | 'center' | 'right') => {
 		if (editableRefs.current[index + 1]) {
@@ -153,6 +172,7 @@ const SpaceElement = ({
 					)}`}
 					ref={el => {
 						editableRefs.current[index + 1] = el
+						editableRef.current = el
 					}}
 					onInput={e => {
 						handleTextChange(elem.id, e.currentTarget.innerHTML || 'New Text')

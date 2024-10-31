@@ -107,31 +107,36 @@ const SpaceHeader = ({
 			</div>
 			<p className='text-center'>Blocks</p>
 			<div className='gap-1 w-full border-b pb-2 border-border justify-between px-4 flex items-center'>
-				<LuHeading1
-					className={`cursor-pointer`}
-					size={'20px'}
+				<div
 					onClick={() => addElement('h1')}
-				/>
-				<LuHeading2
-					className={`cursor-pointer`}
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<LuHeading1 size={'20px'} />
+				</div>
+				<div
 					onClick={() => addElement('h2')}
-				/>
-				<LuHeading3
-					className={`cursor-pointer`}
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<LuHeading2 size={'20px'} />
+				</div>
+				<div
 					onClick={() => addElement('h3')}
-				/>
-				<LuHeading4
-					className={`cursor-pointer`}
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<LuHeading3 size={'20px'} />
+				</div>
+				<div
 					onClick={() => addElement('h4')}
-				/>
-				<LuHeading5
-					className={`cursor-pointer`}
-					size={'20px'}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<LuHeading4 size={'20px'} />
+				</div>
+				<div
 					onClick={() => addElement('h5')}
-				/>
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<LuHeading5 size={'20px'} />
+				</div>
 			</div>
 		</div>
 	)

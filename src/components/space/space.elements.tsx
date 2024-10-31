@@ -1,28 +1,19 @@
 'use client'
 
-import { Element, Space } from '@/app/space/[id]/page'
-import {
-	Dispatch,
-	SetStateAction,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from 'react'
+import { Element } from '@/app/space/[id]/page'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
 import SpaceElement from './space.element'
 
 interface SpaceElementsProps {
-	space: Space | undefined
-	elements: Element[]
-	setElements: Dispatch<SetStateAction<Element[]>>
+	elements: Element[] | undefined
+	setElements: (elements: Element[]) => void
 	changeHeading: (text: string) => void
 	removeElement: (id: number) => void
 }
 
 const SpaceElements = ({
-	space,
 	changeHeading,
 	elements,
 	setElements,
@@ -103,12 +94,13 @@ const SpaceElements = ({
 	}
 
 	const handleTextChange = (id: number, content: string) => {
-		setElements(prev => {
-			if (!prev) return prev
-			return prev.map(element =>
-				element.id === id ? { ...element, content } : element
+		if (elements) {
+			setElements(
+				elements.map(element =>
+					element.id === id ? { ...element, content } : element
+				)
 			)
-		})
+		}
 	}
 
 	// const clearSelection = () => {
@@ -174,9 +166,6 @@ const SpaceElements = ({
 					aria-multiline='true'
 					className='no-outline min-h-20 w-2/3 content editable placeholder text-[50px] bg-transparent resize-none text-center'
 					contentEditable
-					ref={el => {
-						editableRefs.current[0] = el
-					}}
 					onInput={e => {
 						changeHeading(e.currentTarget.textContent || 'New Space')
 						handleCheckIsEmpty(e)
@@ -185,19 +174,20 @@ const SpaceElements = ({
 					suppressContentEditableWarning={true}
 				></div>
 
-				{elements.map((elem, index) => (
-					<SpaceElement
-						key={elem.id}
-						elem={elem}
-						index={index}
-						editableRefs={editableRefs}
-						handleTextChange={handleTextChange}
-						handleCheckIsEmpty={handleCheckIsEmpty}
-						handlePaste={handlePaste}
-						removeElement={removeElement}
-						getStyles={getStyles}
-					/>
-				))}
+				{elements &&
+					elements.map((elem, index) => (
+						<SpaceElement
+							key={elem.id}
+							elem={elem}
+							index={index}
+							editableRefs={editableRefs}
+							handleTextChange={handleTextChange}
+							handleCheckIsEmpty={handleCheckIsEmpty}
+							handlePaste={handlePaste}
+							removeElement={removeElement}
+							getStyles={getStyles}
+						/>
+					))}
 			</div>
 
 			<div
