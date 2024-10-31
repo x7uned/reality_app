@@ -9,9 +9,9 @@ import {
 	useRef,
 	useState,
 } from 'react'
+import { HexColorPicker } from 'react-colorful'
 import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
 import SpaceElement from './space.element'
-import { HexColorPicker } from 'react-colorful'
 
 interface SpaceElementsProps {
 	space: Space | undefined
@@ -65,7 +65,6 @@ const SpaceElements = ({
 				setMenuVisible(true)
 				checkStyleState()
 			} else if (
-				// Добавляем проверку на клик вне меню и пикера
 				!menuRef.current?.contains(selectedNode as Node) &&
 				!pickerRef.current?.contains(selectedNode as Node)
 			) {
@@ -85,12 +84,10 @@ const SpaceElements = ({
 
 	const applyColor = (color: string) => {
 		const selection = window.getSelection()
+		setSelectedColor(color)
 		if (selection && selection.rangeCount > 0) {
-			const range = selection.getRangeAt(0)
-			const span = document.createElement('span')
-			span.style.color = color
-			range.surroundContents(span)
-			setSelectedColor(color)
+			document.execCommand('styleWithCSS', false, 'true')
+			document.execCommand('foreColor', false, color)
 			checkStyleState()
 		}
 	}
@@ -114,12 +111,12 @@ const SpaceElements = ({
 		})
 	}
 
-	const clearSelection = () => {
-		const selection = window.getSelection()
-		if (selection) {
-			selection.removeAllRanges()
-		}
-	}
+	// const clearSelection = () => {
+	// 	const selection = window.getSelection()
+	// 	if (selection) {
+	// 		selection.removeAllRanges()
+	// 	}
+	// }
 
 	const getStyles = (type: string) => {
 		switch (type) {
@@ -248,6 +245,7 @@ const SpaceElements = ({
 						></div>
 					</div>
 					<div
+						onMouseDown={e => e.preventDefault()}
 						className={`absolute top-20 transition-all duration-200 ${
 							picker ? '' : 'opacity-0 pointer-events-none'
 						}`}
@@ -255,8 +253,7 @@ const SpaceElements = ({
 						<div ref={pickerRef} className='flex'>
 							<HexColorPicker
 								color={selectedColor}
-								onChange={e => setSelectedColor(e)}
-								onBlur={() => applyColor(selectedColor)}
+								onChange={e => applyColor(e)}
 							/>
 						</div>
 					</div>
