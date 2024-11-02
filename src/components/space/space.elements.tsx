@@ -185,6 +185,7 @@ const SpaceElements = ({
 							key={elem.id}
 							elem={elem}
 							index={index}
+							changeTypeElement={changeTypeElement}
 							editableRefs={editableRefs}
 							handleTextChange={handleTextChange}
 							handleCheckIsEmpty={handleCheckIsEmpty}
