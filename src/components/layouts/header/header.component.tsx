@@ -1,23 +1,23 @@
 'use client'
 
+import ThemeChangeComponent from '@/components/theme.component'
 import { usePathname, useRouter } from 'next/navigation'
 import {
+	MdEventNote,
 	MdOutlineEditCalendar,
+	MdOutlineKeyboardArrowRight,
 	MdOutlineNote,
 	MdOutlineSettings,
 	MdSpaceDashboard,
-	MdOutlineKeyboardArrowRight,
-	MdEventNote,
 } from 'react-icons/md'
 import ProfileComponent from './profile.component'
-import ThemeChangeComponent from '@/components/theme.component'
 
 const Header = () => {
 	const page = usePathname()
 	const router = useRouter()
 
 	return (
-		<div className='flex z-10 border-r flex-col justify-between w-48 bg-bg fixed h-screen py-2 border-border'>
+		<div className='flex z-10 dark:border-r flex-col justify-between w-48 bg-bg fixed h-screen py-2 border-border'>
 			<div className='flex w-full flex-col gap-1 items-center'>
 				<div
 					onClick={() => router.push('/')}

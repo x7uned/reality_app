@@ -14,10 +14,13 @@ export interface Space {
 	elements: Element[]
 }
 
+export type ElemType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'list'
+
 export interface Element {
 	id: number
-	type: string
+	type: ElemType
 	content: string
+	completed?: boolean
 }
 
 const SpacePage = () => {
@@ -69,19 +72,18 @@ const SpacePage = () => {
 		}
 	}
 
-	const changeTypeElement = (
-		id: number,
-		newType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
-	) => {
+	const changeTypeElement = (id: number, newType: ElemType) => {
 		setSpace(prev => ({
 			...prev,
 			elements: prev.elements.map(element =>
-				element.id === id ? { ...element, type: newType } : element
+				element.id === id
+					? { ...element, type: newType, content: element.content }
+					: element
 			),
 		}))
 	}
 
-	const addElement = (type: string) => {
+	const addElement = (type: ElemType) => {
 		const newElement = { id: Date.now(), content: '', type }
 		setSpace(prev =>
 			prev

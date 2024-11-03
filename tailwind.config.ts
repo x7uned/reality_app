@@ -13,7 +13,6 @@ const config: Config = {
 				body: 'var(--body-bg)',
 				bg: 'var(--bg)',
 				bg2: 'var(--bg2)',
-				secondBg: 'var(--second-bg)',
 				first: 'var(--first)',
 				second: 'var(--second)',
 				text: 'var(--text)',

@@ -1,6 +1,7 @@
+import { ElemType } from '@/app/space/[id]/page'
+import { useEffect, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
-import { TbBrush } from 'react-icons/tb'
-import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
+import { FaListUl } from 'react-icons/fa6'
 import {
 	LuHeading1,
 	LuHeading2,
@@ -8,7 +9,8 @@ import {
 	LuHeading4,
 	LuHeading5,
 } from 'react-icons/lu'
-import { useEffect, useState } from 'react'
+import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
+import { TbBrush } from 'react-icons/tb'
 
 interface SpaceHeaderProps {
 	canDraw: boolean
@@ -20,7 +22,7 @@ interface SpaceHeaderProps {
 	setColor: (value: string) => void
 	lineWidth: number
 	setLineWidth: (value: number) => void
-	addElement: (type: string) => void
+	addElement: (type: ElemType) => void
 }
 
 const SpaceHeader = ({
@@ -106,7 +108,7 @@ const SpaceHeader = ({
 				/>
 			</div>
 			<p className='text-center'>Blocks</p>
-			<div className='gap-1 w-full border-b pb-2 border-border justify-between px-4 flex items-center'>
+			<div className='gap-1 w-full  justify-between px-4 flex items-center'>
 				<div
 					onClick={() => addElement('h1')}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
@@ -136,6 +138,14 @@ const SpaceHeader = ({
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
 					<LuHeading5 size={'20px'} />
+				</div>
+			</div>
+			<div className='gap-1 w-full pb-2 justify-between px-4 flex items-center'>
+				<div
+					onClick={() => addElement('list')}
+					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+				>
+					<FaListUl size={'18px'} />
 				</div>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Element } from '@/app/space/[id]/page'
+import { Element, ElemType } from '@/app/space/[id]/page'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -8,6 +8,7 @@ import {
 	CiTextAlignLeft,
 	CiTextAlignRight,
 } from 'react-icons/ci'
+import { FaListUl } from 'react-icons/fa6'
 import { IoIosArrowForward } from 'react-icons/io'
 import {
 	LuHeading1,
@@ -17,23 +18,21 @@ import {
 	LuHeading5,
 } from 'react-icons/lu'
 import { MdDeleteOutline, MdOutlineLineStyle } from 'react-icons/md'
+import { PiCodeBlockBold } from 'react-icons/pi'
+import BlockSpace from './block.inside'
 
-interface SpaceElementProps {
+interface BlockProps {
 	elem: Element
 	index: number
 	editableRefs: React.MutableRefObject<(HTMLDivElement | null)[]>
 	handleTextChange: (id: number, content: string) => void
 	handleCheckIsEmpty: (e: React.SyntheticEvent<HTMLDivElement>) => void
 	handlePaste: (e: React.ClipboardEvent<HTMLDivElement>) => void
-	getStyles: (type: string) => string
 	removeElement: (id: number) => void
-	changeTypeElement: (
-		id: number,
-		newType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
-	) => void
+	changeTypeElement: (id: number, newType: ElemType) => void
 }
 
-const SpaceElement = ({
+const Block = ({
 	changeTypeElement,
 	elem,
 	index,
@@ -41,9 +40,8 @@ const SpaceElement = ({
 	handleTextChange,
 	handleCheckIsEmpty,
 	handlePaste,
-	getStyles,
 	removeElement,
-}: SpaceElementProps) => {
+}: BlockProps) => {
 	const [settingsMenu, setSettingsMenu] = useState(false)
 	const [hoverButton, setHoverButton] = useState(false)
 	const [typeMenu, setTypeMenu] = useState(false)
@@ -109,15 +107,20 @@ const SpaceElement = ({
 							animate={{ opacity: 1, y: 20 }}
 							exit={{ opacity: 0, y: 0 }}
 							transition={{ duration: 0.2 }}
-							className='flex flex-col gap-1 cursor-pointer absolute left-[-80px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
+							className='flex flex-col gap-1 absolute left-[-80px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
 						>
 							<div
-								className='flex p-1'
+								className='flex p-1 pb-0'
 								onMouseLeave={() => setTypeMenu(false)}
 								onMouseEnter={() => setTypeMenu(true)}
 							>
 								<div className='flex w-full px-2 hover:bg-bg2 rounded-md items-center justify-between h-8'>
-									<p>Type</p>
+									<div className='flex items-center'>
+										<div className='w-6'>
+											<PiCodeBlockBold size='20px' />
+										</div>
+										<p>Type</p>
+									</div>
 									<div className='flex items-center text-subtext'>
 										<p>{elem.type.toUpperCase()}</p>
 										<IoIosArrowForward />
@@ -134,57 +137,66 @@ const SpaceElement = ({
 										>
 											<div
 												onClick={() => changeTypeElement(elem.id, 'h1')}
-												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-center h-8'
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading1 size='20px' />
 												<p className='text-subtext'>Heading 1</p>
 											</div>
 											<div
 												onClick={() => changeTypeElement(elem.id, 'h2')}
-												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-center h-8'
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading2 size='20px' />
 												<p className='text-subtext'>Heading 2</p>
 											</div>
 											<div
 												onClick={() => changeTypeElement(elem.id, 'h3')}
-												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-center h-8'
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading3 size='20px' />
 												<p className='text-subtext'>Heading 3</p>
 											</div>
 											<div
 												onClick={() => changeTypeElement(elem.id, 'h4')}
-												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-center h-8'
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading4 size='20px' />
 												<p className='text-subtext'>Heading 4</p>
 											</div>
 											<div
 												onClick={() => changeTypeElement(elem.id, 'h5')}
-												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-center h-8'
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading5 size='20px' />
 												<p className='text-subtext'>Heading 5</p>
+											</div>
+											<div
+												onClick={() => changeTypeElement(elem.id, 'list')}
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
+											>
+												<FaListUl size='18px' />
+												<p className='text-subtext'>Dot List</p>
 											</div>
 										</motion.div>
 									</div>
 								)}
 							</div>
-							<div
-								onClick={() => {
-									removeElement(elem.id)
-									setSettingsMenu(false)
-								}}
-								className='flex p-1 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'
-							>
-								<div className='flex items-center'>
-									<div className='w-6'>
-										<MdDeleteOutline size='20px' />
+							<div className='flex p-1 py-0'>
+								<div
+									onClick={() => {
+										removeElement(elem.id)
+										setSettingsMenu(false)
+									}}
+									className='flex cursor-pointer px-2 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'
+								>
+									<div className='flex items-center'>
+										<div className='w-6'>
+											<MdDeleteOutline size='20px' />
+										</div>
+										<p>Delete</p>
 									</div>
-									<p>Delete</p>
+									<p className='text-subtext'>Del</p>
 								</div>
-								<p className='text-subtext'>Del</p>
 							</div>
 							<div className='flex flex-col items-center'>
 								<div className='relative flex justify-center w-2/3'>
@@ -236,27 +248,18 @@ const SpaceElement = ({
 				>
 					<MdOutlineLineStyle size={'24px'} />
 				</div>
-				<div
-					role='textbox'
-					aria-multiline='true'
-					contentEditable={true}
-					suppressContentEditableWarning={true}
-					className={`no-outline transition-all duration-200 focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 mr-10 rounded-md w-2/3 text-start resize-none ${getStyles(
-						elem.type
-					)}`}
-					ref={el => {
-						editableRefs.current[index + 1] = el
-						editableRef.current = el
-					}}
-					onInput={e => {
-						handleTextChange(elem.id, e.currentTarget.innerHTML || 'New Text')
-						handleCheckIsEmpty(e)
-					}}
-					onPaste={handlePaste}
-				></div>
+				<BlockSpace
+					editableRefs={editableRefs}
+					editableRef={editableRef}
+					handlePaste={handlePaste}
+					handleCheckIsEmpty={handleCheckIsEmpty}
+					index={index}
+					handleTextChange={handleTextChange}
+					elem={elem}
+				/>
 			</div>
 		</>
 	)
 }
 
-export default SpaceElement
+export default Block

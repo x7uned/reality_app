@@ -1,20 +1,17 @@
 'use client'
 
-import { Element } from '@/app/space/[id]/page'
+import { Element, ElemType } from '@/app/space/[id]/page'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
-import SpaceElement from './space.element'
+import Block from './block'
 
 interface SpaceElementsProps {
 	elements: Element[] | undefined
 	setElements: (elements: Element[]) => void
 	changeHeading: (text: string) => void
 	removeElement: (id: number) => void
-	changeTypeElement: (
-		id: number,
-		newType: 'h1' | 'h2' | 'h3' | 'h4' | 'h5'
-	) => void
+	changeTypeElement: (id: number, newType: ElemType) => void
 }
 
 const SpaceElements = ({
@@ -115,23 +112,6 @@ const SpaceElements = ({
 	// 	}
 	// }
 
-	const getStyles = (type: string) => {
-		switch (type) {
-			case 'h1':
-				return 'text-3xl min-h-12'
-			case 'h2':
-				return 'text-2xl min-h-10'
-			case 'h3':
-				return 'text-xl min-h-10'
-			case 'h4':
-				return 'text-lg min-h-8'
-			case 'h5':
-				return 'text-base min-h-8'
-			default:
-				return 'text-base min-h-6'
-		}
-	}
-
 	const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
 		e.preventDefault()
 		const text = e.clipboardData.getData('text/plain')
@@ -181,7 +161,7 @@ const SpaceElements = ({
 
 				{elements &&
 					elements.map((elem, index) => (
-						<SpaceElement
+						<Block
 							key={elem.id}
 							elem={elem}
 							index={index}
@@ -191,7 +171,6 @@ const SpaceElements = ({
 							handleCheckIsEmpty={handleCheckIsEmpty}
 							handlePaste={handlePaste}
 							removeElement={removeElement}
-							getStyles={getStyles}
 						/>
 					))}
 			</div>
@@ -209,7 +188,6 @@ const SpaceElements = ({
 				<div
 					onClick={() => {
 						applyStyle('bold')
-						console.log(selectedColor)
 					}}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
