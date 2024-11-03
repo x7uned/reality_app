@@ -42,6 +42,18 @@ const SpaceElements = ({
 		}
 	}, [])
 
+	const changeCheckBoxValue = (id: number) => {
+		if (elements) {
+			setElements(
+				elements.map(element =>
+					element.id === id
+						? { ...element, completed: !element.completed }
+						: element
+				)
+			)
+		}
+	}
+
 	const handleTextSelection = useCallback(() => {
 		const selection = window.getSelection()
 		if (selection && selection.rangeCount > 0) {
@@ -171,6 +183,7 @@ const SpaceElements = ({
 							handleCheckIsEmpty={handleCheckIsEmpty}
 							handlePaste={handlePaste}
 							removeElement={removeElement}
+							changeCheckBoxValue={changeCheckBoxValue}
 						/>
 					))}
 			</div>

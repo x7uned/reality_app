@@ -30,9 +30,11 @@ interface BlockProps {
 	handlePaste: (e: React.ClipboardEvent<HTMLDivElement>) => void
 	removeElement: (id: number) => void
 	changeTypeElement: (id: number, newType: ElemType) => void
+	changeCheckBoxValue: (id: number) => void
 }
 
 const Block = ({
+	changeCheckBoxValue,
 	changeTypeElement,
 	elem,
 	index,
@@ -249,6 +251,7 @@ const Block = ({
 					<MdOutlineLineStyle size={'24px'} />
 				</div>
 				<BlockSpace
+					changeCheckBoxValue={changeCheckBoxValue}
 					editableRefs={editableRefs}
 					editableRef={editableRef}
 					handlePaste={handlePaste}

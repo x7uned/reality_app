@@ -14,7 +14,7 @@ export interface Space {
 	elements: Element[]
 }
 
-export type ElemType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'list'
+export type ElemType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'list' | 'checks'
 
 export interface Element {
 	id: number

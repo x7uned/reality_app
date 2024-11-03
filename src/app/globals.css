@@ -75,23 +75,21 @@ body {
 .content:empty::before {
 	content: 'New Space' !important;
 	width: 100%;
-	display: flex;
 	justify-content: center;
 }
 
 .placecenter:empty::before {
 	width: 100%;
-	display: flex;
 	justify-content: center;
 }
 
 .placeright:empty::before {
 	width: 100%;
-	display: flex;
 	justify-content: end;
 }
 
 .placeholder:empty::before {
+	display: flex;
 	content: 'Type something...';
 	color: gray;
 	position: absolute;
