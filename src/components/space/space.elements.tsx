@@ -7,25 +7,30 @@ import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
 import Block from './block'
 
 interface SpaceElementsProps {
+	name: string
 	elements: Element[] | undefined
 	setElements: (elements: Element[]) => void
 	changeHeading: (text: string) => void
 	removeElement: (id: number) => void
-	changeTypeElement: (id: number, newType: ElemType) => void
+	changeTypeElement: (id: number, newType: ElemType, content: string) => void
+	handleTextChange: (id: number, content: string) => void
 }
 
 const SpaceElements = ({
+	name,
 	changeTypeElement,
 	changeHeading,
 	elements,
 	setElements,
 	removeElement,
+	handleTextChange,
 }: SpaceElementsProps) => {
 	const [isMenuVisible, setMenuVisible] = useState(false)
 	const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
 	const editableRefs = useRef<(HTMLDivElement | null)[]>([])
 	const menuRef = useRef<HTMLDivElement | null>(null)
 	const pickerRef = useRef<HTMLDivElement | null>(null)
+	const titleRef = useRef<HTMLDivElement | null>(null)
 
 	const [isBold, setIsBold] = useState(false)
 	const [isItalic, setIsItalic] = useState(false)
@@ -107,16 +112,6 @@ const SpaceElements = ({
 		}
 	}
 
-	const handleTextChange = (id: number, content: string) => {
-		if (elements) {
-			setElements(
-				elements.map(element =>
-					element.id === id ? { ...element, content } : element
-				)
-			)
-		}
-	}
-
 	// const clearSelection = () => {
 	// 	const selection = window.getSelection()
 	// 	if (selection) {
@@ -136,6 +131,12 @@ const SpaceElements = ({
 			document.removeEventListener('click', handleTextSelection)
 		}
 	}, [handleTextSelection])
+
+	useEffect(() => {
+		if (titleRef.current) {
+			titleRef.current.innerHTML = name
+		}
+	}, [name])
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -163,6 +164,7 @@ const SpaceElements = ({
 					aria-multiline='true'
 					className='no-outline min-h-20 w-2/3 content editable placeholder text-[50px] bg-transparent resize-none text-center'
 					contentEditable
+					ref={titleRef}
 					onInput={e => {
 						changeHeading(e.currentTarget.textContent || 'New Space')
 						handleCheckIsEmpty(e)
@@ -170,8 +172,7 @@ const SpaceElements = ({
 					onPaste={handlePaste}
 					suppressContentEditableWarning={true}
 				></div>
-
-				{elements &&
+				{Array.isArray(elements) &&
 					elements.map((elem, index) => (
 						<Block
 							key={elem.id}
@@ -199,7 +200,8 @@ const SpaceElements = ({
 				} flex items-center transition-opacity duration-150 absolute bg-bg border-border border rounded-md`}
 			>
 				<div
-					onClick={() => {
+					onMouseDown={e => {
+						e.preventDefault()
 						applyStyle('bold')
 					}}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
@@ -212,7 +214,10 @@ const SpaceElements = ({
 				</div>
 
 				<div
-					onClick={() => applyStyle('italic')}
+					onMouseDown={e => {
+						e.preventDefault()
+						applyStyle('italic')
+					}}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
 					<button
@@ -223,7 +228,10 @@ const SpaceElements = ({
 				</div>
 
 				<div
-					onClick={() => applyStyle('underline')}
+					onMouseDown={e => {
+						e.preventDefault()
+						applyStyle('italic')
+					}}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
 					<button
@@ -246,7 +254,7 @@ const SpaceElements = ({
 
 				<div
 					onMouseDown={e => e.preventDefault()}
-					className={`absolute top-20 transition-all duration-200 ${
+					className={`absolute top-12 transition-all duration-200 ${
 						picker ? '' : 'opacity-0 pointer-events-none'
 					}`}
 				>

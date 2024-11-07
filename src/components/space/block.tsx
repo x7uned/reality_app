@@ -8,7 +8,7 @@ import {
 	CiTextAlignLeft,
 	CiTextAlignRight,
 } from 'react-icons/ci'
-import { FaListUl } from 'react-icons/fa6'
+import { FaListCheck, FaListUl } from 'react-icons/fa6'
 import { IoIosArrowForward } from 'react-icons/io'
 import {
 	LuHeading1,
@@ -29,7 +29,7 @@ interface BlockProps {
 	handleCheckIsEmpty: (e: React.SyntheticEvent<HTMLDivElement>) => void
 	handlePaste: (e: React.ClipboardEvent<HTMLDivElement>) => void
 	removeElement: (id: number) => void
-	changeTypeElement: (id: number, newType: ElemType) => void
+	changeTypeElement: (id: number, newType: ElemType, content: string) => void
 	changeCheckBoxValue: (id: number) => void
 }
 
@@ -138,46 +138,67 @@ const Block = ({
 											className='flex flex-col gap-1 cursor-pointer z-20 w-64 bg-bg p-1 rounded-lg shadow-md settings-menu'
 										>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'h1')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'h1', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading1 size='20px' />
 												<p className='text-subtext'>Heading 1</p>
 											</div>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'h2')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'h2', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading2 size='20px' />
 												<p className='text-subtext'>Heading 2</p>
 											</div>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'h3')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'h3', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading3 size='20px' />
 												<p className='text-subtext'>Heading 3</p>
 											</div>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'h4')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'h4', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading4 size='20px' />
 												<p className='text-subtext'>Heading 4</p>
 											</div>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'h5')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'h5', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<LuHeading5 size='20px' />
 												<p className='text-subtext'>Heading 5</p>
 											</div>
 											<div
-												onClick={() => changeTypeElement(elem.id, 'list')}
+												onClick={() =>
+													changeTypeElement(elem.id, 'list', elem.content)
+												}
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<FaListUl size='18px' />
 												<p className='text-subtext'>Dot List</p>
+											</div>
+											<div
+												onClick={() =>
+													changeTypeElement(elem.id, 'checks', elem.content)
+												}
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
+											>
+												<FaListCheck size='18px' />
+												<p className='text-subtext'>Checkbox</p>
 											</div>
 										</motion.div>
 									</div>

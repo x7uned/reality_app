@@ -11,18 +11,6 @@ export interface SignUpFetch {
 	password: string
 }
 
-export interface ChangeProfileFetch {
-	avatar?: string
-	username: string
-	banner?: string
-	description?: string
-}
-
-export interface SignInFetch {
-	login: string
-	password: string
-}
-
 const authSlice = createSlice({
 	name: 'user',
 	initialState,
@@ -48,18 +36,6 @@ export const fetchSignUp = createAsyncThunk(
 	}
 )
 
-export const fetchEditProfile = createAsyncThunk(
-	'user/fetchEditProfile',
-	async (userData: ChangeProfileFetch) => {
-		try {
-			const response = await axiosInstance.put('auth/updateProfile', userData)
-			return response.data
-		} catch (error) {
-			console.error('Something went wrong', error)
-		}
-	}
-)
-
 interface fetchFindUserInterface {
 	id: string
 }
@@ -72,42 +48,6 @@ export const fetchFindUser = createAsyncThunk(
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong #findUser', error)
-		}
-	}
-)
-
-export const fetchGetFriends = createAsyncThunk(
-	'user/fetchGetFriends',
-	async () => {
-		try {
-			const response = await axiosInstance.get(`auth/friends`)
-			return response.data
-		} catch (error) {
-			console.error('Something went wrong #getFriends', error)
-		}
-	}
-)
-
-export const fetchFindUsername = createAsyncThunk(
-	'user/fetchFindUsername',
-	async (params: string) => {
-		try {
-			const response = await axiosInstance.get(`auth/many?username=${params}`)
-			return response.data
-		} catch (error) {
-			console.error('Something went wrong #findUser', error)
-		}
-	}
-)
-
-export const fetchSignIn = createAsyncThunk(
-	'user/fetchSignIn',
-	async (userData: SignInFetch) => {
-		try {
-			const response = await axiosInstance.post('auth/login', userData)
-			return response.data
-		} catch (error) {
-			console.error('Something went wrong', error)
 		}
 	}
 )

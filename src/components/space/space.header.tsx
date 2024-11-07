@@ -1,7 +1,7 @@
 import { ElemType } from '@/app/space/[id]/page'
 import { useEffect, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
-import { FaListOl, FaListUl } from 'react-icons/fa6'
+import { FaListCheck, FaListUl } from 'react-icons/fa6'
 import {
 	LuHeading1,
 	LuHeading2,
@@ -151,7 +151,7 @@ const SpaceHeader = ({
 					onClick={() => addElement('checks')}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
-					<FaListOl size={'18px'} />
+					<FaListCheck size={'18px'} />
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,9 @@
 import CanvasBackground from '@/components/canvas.component'
 import SpaceElements from '@/components/space/space.elements'
 import SpaceHeader from '@/components/space/space.header'
-import { useParams } from 'next/navigation'
+import { fetchGetSpaceById, fetchSaveSpace } from '@/lib/slices/space.slice'
+import { useAppDispatch } from '@/lib/store'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
 export interface Space {
@@ -24,6 +26,8 @@ export interface Element {
 }
 
 const SpacePage = () => {
+	const dispatch = useAppDispatch()
+	const router = useRouter()
 	const params = useParams<{ id: string }>()
 	const [canDraw, setCanDraw] = useState(false)
 	const [color, setColor] = useState('#6e62e5')
@@ -39,8 +43,9 @@ const SpacePage = () => {
 		id: 1,
 		background: '',
 		name: 'New Space',
-		elements: [], // Инициализация массива элементов
+		elements: [],
 	})
+	const [isLoading, setIsLoading] = useState(true)
 	const [needToSave, setNeedToSave] = useState(false)
 	const canvasRef = useRef<{ clearCanvas: () => void } | null>(null)
 
@@ -48,18 +53,47 @@ const SpacePage = () => {
 		canvasRef.current?.clearCanvas()
 	}
 
+	const fetchSpace = async (id: string): Promise<Space | null> => {
+		try {
+			const fetch = await dispatch(fetchGetSpaceById(Number(id)))
+			return (fetch.payload.result as Space) || null
+		} catch (error) {
+			console.error(error)
+			return null
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
 	useEffect(() => {
-		setSpace(saveSpace)
-	}, [saveSpace])
+		const loadSpace = async () => {
+			const fetchedSpace = await fetchSpace(params.id)
+			if (fetchedSpace) {
+				console.log(fetchedSpace)
+				setSpace(fetchedSpace)
+				setSaveSpace(fetchedSpace)
+			} else {
+				router.push('/space/notfound')
+			}
+		}
+		loadSpace()
+	}, [params.id])
 
 	useEffect(() => {
 		const isChanged = JSON.stringify(space) !== JSON.stringify(saveSpace)
 		setNeedToSave(isChanged)
 	}, [space, saveSpace])
 
-	const handleSave = () => {
-		setSaveSpace(space)
-		setNeedToSave(false)
+	const handleSave = async () => {
+		try {
+			const fetch = await dispatch(fetchSaveSpace(space))
+			if (fetch.payload.success) {
+				setSaveSpace(space)
+				setNeedToSave(false)
+			}
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
 	const changeHeading = (text: string) => {
@@ -72,19 +106,33 @@ const SpacePage = () => {
 		}
 	}
 
-	const changeTypeElement = (id: number, newType: ElemType) => {
+	const handleTextChange = (id: number, content: string) => {
+		const newElements = space.elements.map(element =>
+			element.id === id ? { ...element, content } : element
+		)
+		setSpace(prev => ({
+			...prev,
+			elements: newElements,
+		}))
+	}
+
+	const changeTypeElement = (
+		id: number,
+		newType: ElemType,
+		content: string
+	) => {
 		setSpace(prev => ({
 			...prev,
 			elements: prev.elements.map(element =>
 				element.id === id
-					? { ...element, type: newType, content: element.content }
+					? { ...element, type: newType, content: content }
 					: element
 			),
 		}))
 	}
 
 	const addElement = (type: ElemType) => {
-		const newElement = { id: Date.now(), content: '', type }
+		const newElement = { id: Date.now(), content: '', type, completed: false }
 		setSpace(prev =>
 			prev
 				? { ...prev, elements: [...prev.elements, newElement] }
@@ -105,6 +153,14 @@ const SpacePage = () => {
 			...prev,
 			elements: prev.elements.filter(element => element.id !== id),
 		}))
+	}
+
+	if (isLoading) {
+		return (
+			<div className='flex w-full h-screen bg-bg justify-center items-center'>
+				<div className='loader'></div>
+			</div>
+		)
 	}
 
 	return (
@@ -129,11 +185,13 @@ const SpacePage = () => {
 				lineWidth={lineWidth}
 			/>
 			<SpaceElements
+				name={saveSpace.name}
 				changeTypeElement={changeTypeElement}
 				changeHeading={changeHeading}
 				elements={space?.elements}
 				setElements={setElements}
 				removeElement={removeElement}
+				handleTextChange={handleTextChange}
 			/>
 
 			<div
