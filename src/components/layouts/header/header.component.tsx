@@ -1,7 +1,10 @@
 'use client'
 
 import ThemeChangeComponent from '@/components/theme.component'
+import { fetchGetSpaces } from '@/lib/slices/space.slice'
+import { useAppDispatch } from '@/lib/store'
 import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import {
 	MdEventNote,
 	MdOutlineEditCalendar,
@@ -12,54 +15,71 @@ import {
 } from 'react-icons/md'
 import ProfileComponent from './profile.component'
 
+export interface SpaceMini {
+	id: number
+	name: string
+}
+
 const Header = () => {
 	const page = usePathname()
 	const router = useRouter()
+	const dispatch = useAppDispatch()
+	const [spaces, setSpaces] = useState<SpaceMini[]>([])
+
+	const fetchSpacesData = useCallback(async () => {
+		try {
+			const fetch = await dispatch(fetchGetSpaces())
+			if (fetch.payload.spaces) {
+				setSpaces(fetch.payload.spaces || [])
+			}
+		} catch (error) {
+			console.error('Error fetching spaces:', error)
+		}
+	}, [dispatch])
+
+	useEffect(() => {
+		fetchSpacesData()
+	}, [fetchSpacesData])
+
+	const getNavItemClass = (path: string) =>
+		`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
+			page === path ? 'bg-selection' : ''
+		}`
+
+	const getIconClass = (path: string) =>
+		`w-1/6 transition-all duration-300 ${page === path ? 'text-second' : ''}`
 
 	return (
 		<div className='flex z-10 dark:border-r flex-col justify-between w-48 bg-bg fixed h-screen py-2 border-border'>
 			<div className='flex w-full flex-col gap-1 items-center'>
-				<div
-					onClick={() => router.push('/')}
-					className={`flex transition-all duration-300 items-center cursor-pointer hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
-						page == '/' ? 'bg-selection' : ''
-					}`}
-				>
-					<MdSpaceDashboard
-						size={'20px'}
-						className={`w-1/6 transition-all duration-300 ${
-							page == '/' ? 'text-second' : ''
-						}`}
-					/>
+				<div onClick={() => router.push('/')} className={getNavItemClass('/')}>
+					<MdSpaceDashboard size={'20px'} className={getIconClass('/')} />
 					<p className='ml-2 w-5/6'>Dashboard</p>
 				</div>
 				<div
-					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
-						page == '/calendar' ? 'bg-selection' : ''
-					}`}
+					onClick={() => router.push('/calendar')}
+					className={getNavItemClass('/calendar')}
 				>
 					<MdOutlineEditCalendar
 						size={'20px'}
-						className={`w-1/6 transition-all duration-300 ${
-							page == '/calendar' ? 'text-second' : ''
-						}`}
+						className={getIconClass('/calendar')}
 					/>
 					<p className='ml-2 w-5/6'>Calendar</p>
 				</div>
 				<div
-					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
-						page == '/settings' ? 'bg-selection' : ''
-					}`}
+					onClick={() => router.push('/settings')}
+					className={getNavItemClass('/settings')}
 				>
 					<MdOutlineSettings
 						size={'20px'}
-						className={`w-1/6 transition-all duration-300 ${
-							page == '/settings' ? 'text-second' : ''
-						}`}
+						className={getIconClass('/settings')}
 					/>
 					<p className='ml-2 w-5/6'>Settings</p>
 				</div>
-				<div className='relative flex justify-center w-2/3'>
+				<div
+					onClick={() => console.log(spaces)}
+					className='relative flex justify-center w-2/3'
+				>
 					<div className='absolute inset-0 flex items-center'>
 						<div className='w-full border-t border-border'></div>
 					</div>
@@ -67,23 +87,22 @@ const Header = () => {
 						<MdEventNote />
 					</span>
 				</div>
-				<div
-					onClick={() => router.push('/space/1')}
-					className={`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
-						page.includes('space/1') ? 'bg-selection' : ''
-					}`}
-				>
-					<MdOutlineNote
-						size={'20px'}
-						className={`w-1/6 transition-all duration-300 ${
-							page.includes('space/1') ? 'text-second' : ''
-						}`}
-					/>
-					<p className='ml-2 w-5/6'>New Space</p>
-					<MdOutlineKeyboardArrowRight
-						className={page.includes('space/1') ? '' : 'hidden'}
-					/>
-				</div>
+				{spaces.map(space => (
+					<div
+						key={space.id}
+						onClick={() => router.push(`/space/${space.id}`)}
+						className={getNavItemClass(`/space/${space.id}`)}
+					>
+						<MdOutlineNote
+							size={'20px'}
+							className={getIconClass(`/space/${space.id}`)}
+						/>
+						<p className='ml-2 truncate w-5/6'>{space.name}</p>
+						{page.includes(`/space/${space.id}`) && (
+							<MdOutlineKeyboardArrowRight />
+						)}
+					</div>
+				))}
 			</div>
 			<div className='flex flex-col items-center'>
 				<ThemeChangeComponent />
