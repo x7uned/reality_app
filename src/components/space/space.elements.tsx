@@ -1,6 +1,7 @@
 'use client'
 
 import { Element, ElemType } from '@/app/space/[id]/page'
+import { Reorder } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { FaBold, FaItalic, FaUnderline } from 'react-icons/fa6'
@@ -14,6 +15,7 @@ interface SpaceElementsProps {
 	removeElement: (id: number) => void
 	changeTypeElement: (id: number, newType: ElemType, content: string) => void
 	handleTextChange: (id: number, content: string) => void
+	setTextAlign: (id: number, type: 'left' | 'center' | 'right') => void
 }
 
 const SpaceElements = ({
@@ -24,6 +26,7 @@ const SpaceElements = ({
 	setElements,
 	removeElement,
 	handleTextChange,
+	setTextAlign,
 }: SpaceElementsProps) => {
 	const [isMenuVisible, setMenuVisible] = useState(false)
 	const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
@@ -172,21 +175,30 @@ const SpaceElements = ({
 					onPaste={handlePaste}
 					suppressContentEditableWarning={true}
 				></div>
-				{Array.isArray(elements) &&
-					elements.map((elem, index) => (
-						<Block
-							key={elem.id}
-							elem={elem}
-							index={index}
-							changeTypeElement={changeTypeElement}
-							editableRefs={editableRefs}
-							handleTextChange={handleTextChange}
-							handleCheckIsEmpty={handleCheckIsEmpty}
-							handlePaste={handlePaste}
-							removeElement={removeElement}
-							changeCheckBoxValue={changeCheckBoxValue}
-						/>
-					))}
+				{Array.isArray(elements) && (
+					<Reorder.Group
+						className='w-full'
+						axis='y'
+						onReorder={setElements}
+						values={elements}
+					>
+						{elements.map((elem, index) => (
+							<Block
+								key={elem.id}
+								elem={elem}
+								index={index}
+								changeTypeElement={changeTypeElement}
+								editableRefs={editableRefs}
+								handleTextChange={handleTextChange}
+								handleCheckIsEmpty={handleCheckIsEmpty}
+								handlePaste={handlePaste}
+								removeElement={removeElement}
+								changeCheckBoxValue={changeCheckBoxValue}
+								setTextAlign={setTextAlign}
+							/>
+						))}
+					</Reorder.Group>
+				)}
 			</div>
 
 			<div

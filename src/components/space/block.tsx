@@ -1,7 +1,7 @@
 'use client'
 
 import { Element, ElemType } from '@/app/space/[id]/page'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, Reorder, useMotionValue } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import {
 	CiTextAlignCenter,
@@ -31,6 +31,7 @@ interface BlockProps {
 	removeElement: (id: number) => void
 	changeTypeElement: (id: number, newType: ElemType, content: string) => void
 	changeCheckBoxValue: (id: number) => void
+	setTextAlign: (id: number, type: 'left' | 'center' | 'right') => void
 }
 
 const Block = ({
@@ -43,6 +44,7 @@ const Block = ({
 	handleCheckIsEmpty,
 	handlePaste,
 	removeElement,
+	setTextAlign,
 }: BlockProps) => {
 	const [settingsMenu, setSettingsMenu] = useState(false)
 	const [hoverButton, setHoverButton] = useState(false)
@@ -79,6 +81,10 @@ const Block = ({
 		}
 	}, [elem.id, removeElement])
 
+	useEffect(() => {
+		handleTextAlign(elem.textAlign || 'left')
+	}, [])
+
 	const handleTextAlign = (align: 'left' | 'center' | 'right') => {
 		if (editableRefs.current[index + 1]) {
 			editableRefs.current[index + 1]!.style.textAlign = align
@@ -92,11 +98,14 @@ const Block = ({
 				editableRefs.current[index + 1]?.classList.remove('placeright')
 				editableRefs.current[index + 1]?.classList.remove('placecenter')
 			}
+			setTextAlign(elem.id, align)
 		}
 	}
 
+	const y = useMotionValue(0)
+
 	return (
-		<>
+		<Reorder.Item value={elem} id={elem.content} style={{ y }}>
 			<div
 				onMouseEnter={() => setHoverButton(true)}
 				onMouseLeave={() => setHoverButton(false)}
@@ -282,7 +291,7 @@ const Block = ({
 					elem={elem}
 				/>
 			</div>
-		</>
+		</Reorder.Item>
 	)
 }
 

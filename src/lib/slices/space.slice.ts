@@ -31,7 +31,10 @@ export const fetchSaveSpace = createAsyncThunk(
 		try {
 			const response = await axiosInstance.patch('space/update', data)
 			return response.data
-		} catch (error) {
+		} catch (error: any) {
+			if (error.response.status == 401) {
+				return null
+			}
 			console.error('Something went wrong', error)
 		}
 	}

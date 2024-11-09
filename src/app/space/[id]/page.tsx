@@ -23,6 +23,7 @@ export interface Element {
 	type: ElemType
 	content: string
 	completed?: boolean
+	textAlign?: 'left' | 'center' | 'right'
 }
 
 const SpacePage = () => {
@@ -51,6 +52,16 @@ const SpacePage = () => {
 
 	const clearCanvas = () => {
 		canvasRef.current?.clearCanvas()
+	}
+
+	const setTextAlign = (id: number, type: 'left' | 'center' | 'right') => {
+		const newElements = space.elements.map(element =>
+			element.id === id ? { ...element, textAlign: type } : element
+		)
+		setSpace(prev => ({
+			...prev,
+			elements: newElements,
+		}))
 	}
 
 	const fetchSpace = async (id: string): Promise<Space | null> => {
@@ -87,12 +98,14 @@ const SpacePage = () => {
 	const handleSave = async () => {
 		try {
 			const fetch = await dispatch(fetchSaveSpace(space))
-			if (fetch.payload.success) {
+			if (fetch?.payload.success) {
 				setSaveSpace(space)
 				setNeedToSave(false)
+			} else {
+				return false
 			}
 		} catch (error) {
-			console.error(error)
+			// console.error(error)
 		}
 	}
 
@@ -192,6 +205,7 @@ const SpacePage = () => {
 				setElements={setElements}
 				removeElement={removeElement}
 				handleTextChange={handleTextChange}
+				setTextAlign={setTextAlign}
 			/>
 
 			<div
