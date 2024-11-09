@@ -51,7 +51,7 @@ const SpaceElements = ({
 	}, [])
 
 	const changeCheckBoxValue = (id: number) => {
-		if (elements) {
+		if (Array.isArray(elements)) {
 			setElements(
 				elements.map(element =>
 					element.id === id
@@ -59,6 +59,18 @@ const SpaceElements = ({
 						: element
 				)
 			)
+		}
+	}
+
+	const handleChangeSize = (id: number, width: number, height: number) => {
+		if (Array.isArray(elements)) {
+			setElements(
+				elements.map(element =>
+					element.id === id ? { ...element, width, height } : element
+				)
+			)
+
+			console.log(elements)
 		}
 	}
 
@@ -192,6 +204,7 @@ const SpaceElements = ({
 								handleTextChange={handleTextChange}
 								handleCheckIsEmpty={handleCheckIsEmpty}
 								handlePaste={handlePaste}
+								handleChangeSize={handleChangeSize}
 								removeElement={removeElement}
 								changeCheckBoxValue={changeCheckBoxValue}
 								setTextAlign={setTextAlign}

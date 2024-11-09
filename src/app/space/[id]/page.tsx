@@ -16,7 +16,16 @@ export interface Space {
 	elements: Element[]
 }
 
-export type ElemType = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'list' | 'checks'
+export type ElemType =
+	| 'h1'
+	| 'h2'
+	| 'h3'
+	| 'h4'
+	| 'h5'
+	| 'list'
+	| 'checks'
+	| 'nums'
+	| 'img'
 
 export interface Element {
 	id: number
@@ -24,6 +33,8 @@ export interface Element {
 	content: string
 	completed?: boolean
 	textAlign?: 'left' | 'center' | 'right'
+	width?: number
+	height?: number
 }
 
 const SpacePage = () => {
@@ -144,8 +155,13 @@ const SpacePage = () => {
 		}))
 	}
 
-	const addElement = (type: ElemType) => {
-		const newElement = { id: Date.now(), content: '', type, completed: false }
+	const addElement = (type: ElemType, content?: string) => {
+		const newElement = {
+			id: Date.now(),
+			content: content || '',
+			type,
+			completed: false,
+		}
 		setSpace(prev =>
 			prev
 				? { ...prev, elements: [...prev.elements, newElement] }

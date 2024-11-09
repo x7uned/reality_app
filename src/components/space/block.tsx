@@ -32,6 +32,7 @@ interface BlockProps {
 	changeTypeElement: (id: number, newType: ElemType, content: string) => void
 	changeCheckBoxValue: (id: number) => void
 	setTextAlign: (id: number, type: 'left' | 'center' | 'right') => void
+	handleChangeSize: (id: number, width: number, height: number) => void
 }
 
 const Block = ({
@@ -45,6 +46,7 @@ const Block = ({
 	handlePaste,
 	removeElement,
 	setTextAlign,
+	handleChangeSize,
 }: BlockProps) => {
 	const [settingsMenu, setSettingsMenu] = useState(false)
 	const [hoverButton, setHoverButton] = useState(false)
@@ -105,7 +107,12 @@ const Block = ({
 	const y = useMotionValue(0)
 
 	return (
-		<Reorder.Item value={elem} id={elem.content} style={{ y }}>
+		<Reorder.Item
+			drag={elem.type == 'img' ? false : true}
+			value={elem}
+			id={elem.content}
+			style={{ y }}
+		>
 			<div
 				onMouseEnter={() => setHoverButton(true)}
 				onMouseLeave={() => setHoverButton(false)}
@@ -289,6 +296,7 @@ const Block = ({
 					index={index}
 					handleTextChange={handleTextChange}
 					elem={elem}
+					handleChangeSize={handleChangeSize}
 				/>
 			</div>
 		</Reorder.Item>
