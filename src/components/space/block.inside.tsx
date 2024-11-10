@@ -165,6 +165,12 @@ const BlockSpace = ({
 		case 'checks':
 			return (
 				<div className='flex w-2/3 mr-10'>
+					<input
+						type='checkbox'
+						checked={elem.completed ? true : false}
+						onChange={() => changeCheckBoxValue(elem.id)}
+						className='mr-2'
+					/>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -182,12 +188,6 @@ const BlockSpace = ({
 						}}
 						onPaste={handlePaste}
 					></div>
-					<input
-						type='checkbox'
-						checked={elem.completed ? true : false}
-						onChange={() => changeCheckBoxValue(elem.id)}
-						className='mr-2'
-					/>
 				</div>
 			)
 		case 'nums':

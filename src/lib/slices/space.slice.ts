@@ -25,6 +25,26 @@ export const fetchCreateSpace = createAsyncThunk(
 	}
 )
 
+export const fetchUploadImage = createAsyncThunk(
+	'space/fetchUploadImage',
+	async (file: FormData) => {
+		try {
+			const response = await axiosInstance.post('upload/image', file, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			})
+			return response.data // предполагаем, что сервер возвращает информацию о загруженном файле
+		} catch (error: any) {
+			if (error.response && error.response.status === 401) {
+				return null
+			}
+			console.error('Something went wrong', error)
+			throw error // Пробрасываем ошибку, чтобы обработать её в Redux
+		}
+	}
+)
+
 export const fetchSaveSpace = createAsyncThunk(
 	'space/fetchSaveSpace',
 	async (data: Space) => {

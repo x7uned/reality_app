@@ -98,6 +98,10 @@ body {
 	pointer-events: none; /* Чтобы текст не мешал кликам по элементу */
 }
 
+.reorder-group {
+	overflow-x: hidden;
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
 	width: 50px;

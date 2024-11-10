@@ -1,14 +1,22 @@
 'use client'
 
 import { Element, ElemType } from '@/app/space/[id]/page'
-import { AnimatePresence, motion, Reorder, useMotionValue } from 'framer-motion'
+import { fetchUploadImage } from '@/lib/slices/space.slice'
+import { useAppDispatch } from '@/lib/store'
+import {
+	AnimatePresence,
+	motion,
+	Reorder,
+	useDragControls,
+	useMotionValue,
+} from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import {
 	CiTextAlignCenter,
 	CiTextAlignLeft,
 	CiTextAlignRight,
 } from 'react-icons/ci'
-import { FaListCheck, FaListUl } from 'react-icons/fa6'
+import { FaListCheck, FaListOl, FaListUl } from 'react-icons/fa6'
 import { IoIosArrowForward } from 'react-icons/io'
 import {
 	LuHeading1,
@@ -16,9 +24,11 @@ import {
 	LuHeading3,
 	LuHeading4,
 	LuHeading5,
+	LuImagePlus,
 } from 'react-icons/lu'
 import { MdDeleteOutline, MdOutlineLineStyle } from 'react-icons/md'
 import { PiCodeBlockBold } from 'react-icons/pi'
+import { RxDragHandleDots2 } from 'react-icons/rx'
 import BlockSpace from './block.inside'
 
 interface BlockProps {
@@ -52,6 +62,8 @@ const Block = ({
 	const [hoverButton, setHoverButton] = useState(false)
 	const [typeMenu, setTypeMenu] = useState(false)
 	const editableRef = useRef<HTMLDivElement | null>(null)
+	const [fileErrorMessage, setFileErrorMessage] = useState('')
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -104,14 +116,40 @@ const Block = ({
 		}
 	}
 
+	const handleImageChange = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const file = event.target.files?.[0]
+		if (file) {
+			try {
+				const formData = new FormData()
+				formData.append('file', file)
+				const response = await dispatch(fetchUploadImage(formData))
+				if (response.payload) {
+					handleTextChange(
+						elem.id,
+						`http://localhost:4444/uploads/${response.payload}`
+					)
+				} else {
+					setFileErrorMessage('Image upload failed (banner)')
+				}
+			} catch (error) {
+				console.error(error)
+				setFileErrorMessage('Error uploading image (banner)')
+			}
+		}
+	}
+
 	const y = useMotionValue(0)
+	const controls = useDragControls()
 
 	return (
 		<Reorder.Item
-			drag={elem.type == 'img' ? false : true}
 			value={elem}
 			id={elem.content}
 			style={{ y }}
+			dragListener={false}
+			dragControls={controls}
 		>
 			<div
 				onMouseEnter={() => setHoverButton(true)}
@@ -125,10 +163,31 @@ const Block = ({
 							animate={{ opacity: 1, y: 20 }}
 							exit={{ opacity: 0, y: 0 }}
 							transition={{ duration: 0.2 }}
-							className='flex flex-col gap-1 absolute left-[-80px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
+							className='flex flex-col gap-1 absolute left-[-100px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
 						>
+							<div className='flex px-1 pt-1'>
+								<input
+									type='file'
+									accept='image/*'
+									id='file-input'
+									className='hidden'
+									onChange={handleImageChange}
+								/>
+								<div
+									onClick={() => document.getElementById('file-input')?.click()}
+									className='flex cursor-pointer px-2 h-8 hover:bg-bg2 rounded-md items-center justify-between w-full'
+								>
+									<div className='flex items-center'>
+										<div className='w-6'>
+											<LuImagePlus size='20px' />
+										</div>
+										<p>Source</p>
+										<p className='truncate'>{fileErrorMessage}</p>
+									</div>
+								</div>
+							</div>
 							<div
-								className='flex p-1 pb-0'
+								className='flex p-1 pt-0 pb-0'
 								onMouseLeave={() => setTypeMenu(false)}
 								onMouseEnter={() => setTypeMenu(true)}
 							>
@@ -214,13 +273,22 @@ const Block = ({
 												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
 											>
 												<FaListCheck size='18px' />
-												<p className='text-subtext'>Checkbox</p>
+												<p className='text-subtext'>Check list</p>
+											</div>
+											<div
+												onClick={() =>
+													changeTypeElement(elem.id, 'list', elem.content)
+												}
+												className='flex w-full px-2 hover:bg-bg2 rounded-md gap-2 items-center justify-start h-8'
+											>
+												<FaListOl size='18px' />
+												<p className='text-subtext'>Nums List</p>
 											</div>
 										</motion.div>
 									</div>
 								)}
 							</div>
-							<div className='flex p-1 py-0'>
+							<div className='flex px-1 pb-1'>
 								<div
 									onClick={() => {
 										removeElement(elem.id)
@@ -237,7 +305,11 @@ const Block = ({
 									<p className='text-subtext'>Del</p>
 								</div>
 							</div>
-							<div className='flex flex-col items-center'>
+							<div
+								className={`flex flex-col items-center ${
+									elem.type == 'img' ? 'hidden' : ''
+								}`}
+							>
 								<div className='relative flex justify-center w-2/3'>
 									<div className='absolute inset-0 flex items-center'>
 										<div className='w-full border-t border-border'></div>
@@ -286,6 +358,14 @@ const Block = ({
 					}`}
 				>
 					<MdOutlineLineStyle size={'24px'} />
+				</div>
+				<div
+					onPointerDown={e => controls.start(e)}
+					className={`reorder-handle flex left-24 mr-2 hover:bg-bg hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-6 rounded-md transition-all ${
+						hoverButton ? '' : 'opacity-0 pointer-events-none'
+					}`}
+				>
+					<RxDragHandleDots2 size={'24px'} />
 				</div>
 				<BlockSpace
 					changeCheckBoxValue={changeCheckBoxValue}
