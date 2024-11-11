@@ -20,7 +20,20 @@ export const fetchCreateSpace = createAsyncThunk(
 			return response.data
 		} catch (error) {
 			console.error('Something went wrong', error)
-			return { notfound: false }
+			return null
+		}
+	}
+)
+
+export const fetchDeleteSpace = createAsyncThunk(
+	'space/fetchDeleteSpace',
+	async (id: number) => {
+		try {
+			const response = await axiosInstance.delete(`space/delete?id=${id}`)
+			return response.data
+		} catch (error) {
+			console.error('Something went wrong', error)
+			return null
 		}
 	}
 )

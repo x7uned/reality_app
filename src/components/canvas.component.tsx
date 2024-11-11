@@ -1,11 +1,11 @@
 'use client'
 
 import {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
 	useRef,
 	useState,
-	useEffect,
-	forwardRef,
-	useImperativeHandle,
 } from 'react'
 
 interface CanvasBackgroundProps {
@@ -50,7 +50,7 @@ const CanvasBackground = forwardRef((props: CanvasBackgroundProps, ref) => {
 			}
 			contextRef.current.lineWidth = lineWidth // Устанавливаем толщину линии
 		}
-	}, [isErasing, color, lineWidth]) // Добавляем lineWidth как зависимость
+	}, [isErasing, color, lineWidth])
 
 	const startDrawing = (event: React.MouseEvent<HTMLCanvasElement>) => {
 		if (!canDraw) return
@@ -83,6 +83,25 @@ const CanvasBackground = forwardRef((props: CanvasBackgroundProps, ref) => {
 				contextRef.current.clearRect(0, 0, canvas.width, canvas.height)
 			}
 		},
+		saveCanvas: () => {
+			const canvas = canvasRef.current
+			if (canvas) {
+				return canvas.toDataURL('image/png') // Сохраняем в формате PNG
+			}
+			return null
+		},
+		loadCanvas: (dataURL: string) => {
+			const canvas = canvasRef.current
+			const context = contextRef.current
+			if (canvas && context) {
+				const image = new Image()
+				image.onload = () => {
+					context.clearRect(0, 0, canvas.width, canvas.height)
+					context.drawImage(image, 0, 0)
+				}
+				image.src = dataURL // Загружаем изображение
+			}
+		},
 	}))
 
 	return (
@@ -100,7 +119,6 @@ const CanvasBackground = forwardRef((props: CanvasBackgroundProps, ref) => {
 	)
 })
 
-// Добавляем displayName
 CanvasBackground.displayName = 'CanvasBackground'
 
 export default CanvasBackground

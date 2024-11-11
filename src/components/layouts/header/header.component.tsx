@@ -1,15 +1,15 @@
 'use client'
 
 import ThemeChangeComponent from '@/components/theme.component'
-import { fetchGetSpaces } from '@/lib/slices/space.slice'
+import { fetchCreateSpace, fetchGetSpaces } from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { LuFile, LuFilePlus2 } from 'react-icons/lu'
 import {
 	MdEventNote,
 	MdOutlineEditCalendar,
 	MdOutlineKeyboardArrowRight,
-	MdOutlineNote,
 	MdOutlineSettings,
 	MdSpaceDashboard,
 } from 'react-icons/md'
@@ -26,7 +26,7 @@ const Header = () => {
 	const dispatch = useAppDispatch()
 	const [spaces, setSpaces] = useState<SpaceMini[]>([])
 
-	const fetchSpacesData = useCallback(async () => {
+	const fetchSpacesData = async () => {
 		try {
 			const fetch = await dispatch(fetchGetSpaces())
 			if (fetch.payload.spaces) {
@@ -35,11 +35,23 @@ const Header = () => {
 		} catch (error) {
 			console.error('Error fetching spaces:', error)
 		}
-	}, [dispatch])
+	}
 
 	useEffect(() => {
 		fetchSpacesData()
-	}, [fetchSpacesData])
+	}, [dispatch])
+
+	const handleCreateNewSpace = async () => {
+		try {
+			const fetch = await dispatch(fetchCreateSpace())
+			if (fetch.payload.success) {
+				router.push(`/space/${fetch.payload.space.id}`)
+				fetchSpacesData()
+			}
+		} catch (error) {
+			console.error('Error fetching spaces:', error)
+		}
+	}
 
 	const getNavItemClass = (path: string) =>
 		`flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6 ${
@@ -93,7 +105,7 @@ const Header = () => {
 						onClick={() => router.push(`/space/${space.id}`)}
 						className={getNavItemClass(`/space/${space.id}`)}
 					>
-						<MdOutlineNote
+						<LuFile
 							size={'20px'}
 							className={getIconClass(`/space/${space.id}`)}
 						/>
@@ -103,6 +115,18 @@ const Header = () => {
 						)}
 					</div>
 				))}
+				<div
+					onClick={() => handleCreateNewSpace()}
+					className={
+						'flex items-center cursor-pointer transition-all duration-300 hover:bg-selection rounded-[4px] px-2 h-8 w-5/6'
+					}
+				>
+					<LuFilePlus2
+						size={'20px'}
+						className={'w-1/6 transition-all duration-300'}
+					/>
+					<p className='ml-2 truncate w-5/6'>Create Space</p>
+				</div>
 			</div>
 			<div className='flex flex-col items-center'>
 				<ThemeChangeComponent />

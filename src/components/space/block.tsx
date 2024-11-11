@@ -163,9 +163,9 @@ const Block = ({
 							animate={{ opacity: 1, y: 20 }}
 							exit={{ opacity: 0, y: 0 }}
 							transition={{ duration: 0.2 }}
-							className='flex flex-col gap-1 absolute left-[-100px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
+							className='flex flex-col gap-1 py-1 absolute left-[-100px] z-20 w-64 bg-bg rounded-lg shadow-md settings-menu'
 						>
-							<div className='flex px-1 pt-1'>
+							<div className={`px-1 ${elem.type == 'img' ? 'flex' : 'hidden'}`}>
 								<input
 									type='file'
 									accept='image/*'

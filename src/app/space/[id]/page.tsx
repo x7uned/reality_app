@@ -4,7 +4,11 @@
 import CanvasBackground from '@/components/canvas.component'
 import SpaceElements from '@/components/space/space.elements'
 import SpaceHeader from '@/components/space/space.header'
-import { fetchGetSpaceById, fetchSaveSpace } from '@/lib/slices/space.slice'
+import {
+	fetchDeleteSpace,
+	fetchGetSpaceById,
+	fetchSaveSpace,
+} from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
@@ -59,7 +63,20 @@ const SpacePage = () => {
 	})
 	const [isLoading, setIsLoading] = useState(true)
 	const [needToSave, setNeedToSave] = useState(false)
-	const canvasRef = useRef<{ clearCanvas: () => void } | null>(null)
+	const canvasRef = useRef<any>(null)
+
+	const handleDeleteSpace = async () => {
+		try {
+			const fetch = await dispatch(fetchDeleteSpace(space.id))
+			if (fetch?.payload.success) {
+				router.push('/')
+			} else {
+				return false
+			}
+		} catch (error) {
+			console.error(error)
+		}
+	}
 
 	const clearCanvas = () => {
 		canvasRef.current?.clearCanvas()
@@ -108,6 +125,8 @@ const SpacePage = () => {
 
 	const handleSave = async () => {
 		try {
+			const dataURL = canvasRef.current?.saveCanvas()
+			console.log(dataURL)
 			const fetch = await dispatch(fetchSaveSpace(space))
 			if (fetch?.payload.success) {
 				setSaveSpace(space)
@@ -195,6 +214,7 @@ const SpacePage = () => {
 	return (
 		<div className='flex'>
 			<SpaceHeader
+				handleDeleteSpace={handleDeleteSpace}
 				canDraw={canDraw}
 				setCanDraw={setCanDraw}
 				clearCanvas={clearCanvas}
