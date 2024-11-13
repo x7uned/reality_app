@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
+import { SpaceProvider } from '../contexts/spaces.context'
 
 const GlobalProvider = ({
 	children,
@@ -24,7 +25,9 @@ const GlobalProvider = ({
 	return (
 		<ThemeProvider attribute='class'>
 			<SessionProvider>
-				<Provider store={store}>{children}</Provider>
+				<Provider store={store}>
+					<SpaceProvider>{children}</SpaceProvider>
+				</Provider>
 			</SessionProvider>
 		</ThemeProvider>
 	)

@@ -2,6 +2,7 @@
 'use client'
 
 import CanvasBackground from '@/components/canvas.component'
+import { useSpaces } from '@/components/contexts/spaces.context'
 import SpaceElements from '@/components/space/space.elements'
 import SpaceHeader from '@/components/space/space.header'
 import {
@@ -18,6 +19,7 @@ export interface Space {
 	background: string
 	name: string
 	elements: Element[]
+	icon: IconType
 }
 
 export type ElemType =
@@ -30,6 +32,8 @@ export type ElemType =
 	| 'checks'
 	| 'nums'
 	| 'img'
+
+export type IconType = 'default' | 'rocket' | 'body' | 'bolt' | 'heart'
 
 export interface Element {
 	id: number
@@ -44,22 +48,26 @@ export interface Element {
 const SpacePage = () => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
+	const { fetchSpacesData } = useSpaces()
 	const params = useParams<{ id: string }>()
 	const [canDraw, setCanDraw] = useState(false)
 	const [color, setColor] = useState('#6e62e5')
 	const [lineWidth, setLineWidth] = useState(6)
 	const [isErasing, setIsErasing] = useState(false)
+	const [isSaving, setIsSaving] = useState(false)
 	const [saveSpace, setSaveSpace] = useState<Space>({
 		id: 1,
 		background: '',
 		name: 'New Space',
 		elements: [],
+		icon: 'default',
 	})
 	const [space, setSpace] = useState<Space>({
 		id: 1,
 		background: '',
 		name: 'New Space',
 		elements: [],
+		icon: 'default',
 	})
 	const [isLoading, setIsLoading] = useState(true)
 	const [needToSave, setNeedToSave] = useState(false)
@@ -108,7 +116,6 @@ const SpacePage = () => {
 		const loadSpace = async () => {
 			const fetchedSpace = await fetchSpace(params.id)
 			if (fetchedSpace) {
-				console.log(fetchedSpace)
 				setSpace(fetchedSpace)
 				setSaveSpace(fetchedSpace)
 			} else {
@@ -123,19 +130,24 @@ const SpacePage = () => {
 		setNeedToSave(isChanged)
 	}, [space, saveSpace])
 
+	const handleChangeIcon = (icon: IconType) => {
+		setSpace(prev => ({ ...prev, icon }))
+	}
+
 	const handleSave = async () => {
+		if (isSaving) return
+		setIsSaving(true) // Устанавливаем состояние загрузки
 		try {
-			const dataURL = canvasRef.current?.saveCanvas()
-			console.log(dataURL)
-			const fetch = await dispatch(fetchSaveSpace(space))
+			const fetch = await dispatch(fetchSaveSpace({ ...space }))
 			if (fetch?.payload.success) {
 				setSaveSpace(space)
 				setNeedToSave(false)
-			} else {
-				return false
+				fetchSpacesData()
 			}
 		} catch (error) {
-			// console.error(error)
+			console.error(error)
+		} finally {
+			setIsSaving(false) // Сбрасываем состояние загрузки
 		}
 	}
 
@@ -144,7 +156,7 @@ const SpacePage = () => {
 			setSpace(prev =>
 				prev
 					? { ...prev, name: text }
-					: { id: 0, background: '', name: text, elements: [] }
+					: { id: 0, background: '', name: text, elements: [], icon: 'default' }
 			)
 		}
 	}
@@ -184,7 +196,13 @@ const SpacePage = () => {
 		setSpace(prev =>
 			prev
 				? { ...prev, elements: [...prev.elements, newElement] }
-				: { id: 0, background: '', name: 'New Space', elements: [newElement] }
+				: {
+						id: 0,
+						icon: 'default',
+						background: '',
+						name: 'New Space',
+						elements: [newElement],
+				  }
 		)
 	}
 
@@ -192,7 +210,13 @@ const SpacePage = () => {
 		setSpace(prev =>
 			prev
 				? { ...prev, elements }
-				: { id: 0, background: '', name: 'New Space', elements: [] }
+				: {
+						id: 0,
+						icon: 'default',
+						background: '',
+						name: 'New Space',
+						elements: [],
+				  }
 		)
 	}
 
@@ -225,6 +249,8 @@ const SpacePage = () => {
 				lineWidth={lineWidth}
 				setLineWidth={setLineWidth}
 				addElement={addElement}
+				space={space}
+				handleChangeIcon={handleChangeIcon}
 			/>
 			<CanvasBackground
 				ref={canvasRef}
@@ -249,13 +275,16 @@ const SpacePage = () => {
 					needToSave ? 'right-6' : 'right-[-400px] pointer-events-none'
 				} bg-bg border border-border`}
 			>
-				<p onClick={() => console.log(space)}>Your space may be lost.</p>
+				<p>Your space may be lost.</p>
 				<button
-					className='bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white'
+					className={`bg-[var(--second)] w-full py-2 rounded-md mt-2 text-white ${
+						isSaving ? 'opacity-50 cursor-not-allowed' : ''
+					}`}
 					onClick={handleSave}
 					type='button'
+					disabled={isSaving} // Отключаем кнопку во время загрузки
 				>
-					Save
+					{isSaving ? 'Saving...' : 'Save'}
 				</button>
 			</div>
 		</div>

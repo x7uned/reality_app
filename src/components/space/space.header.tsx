@@ -1,4 +1,5 @@
-import { ElemType } from '@/app/space/[id]/page'
+import { ElemType, IconType, Space } from '@/app/space/[id]/page'
+import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { FaImage, FaListCheck, FaListOl, FaListUl } from 'react-icons/fa6'
@@ -12,6 +13,8 @@ import {
 import { MdDeleteOutline } from 'react-icons/md'
 import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
 import { TbBrush } from 'react-icons/tb'
+import { useSpaces } from '../contexts/spaces.context'
+import IconsComponent from './icons.component'
 
 interface SpaceHeaderProps {
 	canDraw: boolean
@@ -25,6 +28,8 @@ interface SpaceHeaderProps {
 	setLineWidth: (value: number) => void
 	addElement: (type: ElemType) => void
 	handleDeleteSpace: () => void
+	space: Space
+	handleChangeIcon: (icon: IconType) => void
 }
 
 const SpaceHeader = ({
@@ -39,8 +44,25 @@ const SpaceHeader = ({
 	setLineWidth,
 	addElement,
 	handleDeleteSpace,
+	space,
+	handleChangeIcon,
 }: SpaceHeaderProps) => {
+	const { fetchSpacesData } = useSpaces()
 	const [picker, setPicker] = useState(false)
+	const [iconMenu, setIconMenu] = useState(false)
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as HTMLElement
+			if (iconMenu && !target.closest('.iconMenu')) {
+				setIconMenu(false)
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [iconMenu])
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -55,16 +77,55 @@ const SpaceHeader = ({
 		}
 	}, [picker])
 
+	const IconElem = ({ icon }: { icon: IconType }) => {
+		return (
+			<div
+				onClick={() => handleChangeIcon(icon)}
+				title={icon}
+				className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+			>
+				<IconsComponent icon={icon} active={space.icon == icon} />
+			</div>
+		)
+	}
+
 	return (
 		<div className='flex z-10 items-center flex-col gap-1 w-56 bg-bg fixed h-screen py-2'>
 			<p className='text-center'>Settings</p>
 			<div className='gap-1 w-full border-b pb-2 border-border justify-between px-4 flex items-center'>
 				<div
-					onClick={() => handleDeleteSpace()}
+					onClick={() => {
+						handleDeleteSpace()
+						fetchSpacesData()
+					}}
 					title='Delete'
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>
 					<MdDeleteOutline className={`text-red-400`} size={'20px'} />
+				</div>
+				<div className='flex justify-center'>
+					<div
+						onClick={() => setIconMenu(true)}
+						title='Icon'
+						className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
+					>
+						<IconsComponent icon={space.icon} active={false} />
+					</div>
+					{iconMenu && (
+						<motion.div
+							initial={{ opacity: 0, y: 0 }}
+							animate={{ opacity: 1, y: 20 }}
+							exit={{ opacity: 0, y: 0 }}
+							transition={{ duration: 0.2 }}
+							className='iconMenu flex gap-1 py-1 px-2 rounded-md bg-bg absolute top-12'
+						>
+							<IconElem icon={'default'} />
+							<IconElem icon={'body'} />
+							<IconElem icon={'rocket'} />
+							<IconElem icon={'heart'} />
+							<IconElem icon={'bolt'} />
+						</motion.div>
+					)}
 				</div>
 			</div>
 			<p className='text-center'>Background</p>
@@ -96,7 +157,6 @@ const SpaceHeader = ({
 						size={'20px'}
 					/>
 				</div>
-
 				<>
 					<div
 						onClick={() => setPicker(!picker)}
@@ -109,7 +169,7 @@ const SpaceHeader = ({
 						></div>
 					</div>
 					<div
-						className={`absolute picker top-20 transition-all duration-200 ${
+						className={`absolute picker top-36 transition-all duration-200 ${
 							picker ? '' : 'opacity-0 pointer-events-none'
 						}`}
 					>
