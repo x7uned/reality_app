@@ -44,9 +44,12 @@ const Header = () => {
 		`w-1/6 transition-all duration-300 ${page === path ? 'text-second' : ''}`
 
 	return (
-		<div className='flex z-10 dark:border-r flex-col justify-center gap-6 w-48 bg-bg fixed h-screen py-2 border-border'>
+		<div className='flex z-10 dark:border-r flex-col justify-between gap-6 w-48 bg-bg fixed h-screen py-2 border-border'>
 			<div className='flex w-full flex-col gap-1 items-center'>
-				<div onClick={() => router.push('/')} className={getNavItemClass('/')}>
+				<div
+					onClick={() => router.push('/dashboard')}
+					className={getNavItemClass('/dashboard')}
+				>
 					<MdSpaceDashboard size={'20px'} className={getIconClass('/')} />
 					<p className='ml-2 w-5/6'>Dashboard</p>
 				</div>

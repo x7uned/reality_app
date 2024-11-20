@@ -1,5 +1,4 @@
 import GlobalProvider from '../providers/global.provider'
-import Header from './header/header.component'
 import NotificationBar from './notifications/notification.bar'
 
 export default function GlobalLayout({
@@ -9,8 +8,7 @@ export default function GlobalLayout({
 }>) {
 	return (
 		<GlobalProvider>
-			<Header />
-			<main className='pl-48'>{children}</main>
+			{children}
 			<NotificationBar />
 		</GlobalProvider>
 	)

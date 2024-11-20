@@ -25,7 +25,7 @@ export default function Auth() {
 	}
 
 	return (
-		<div className='flex w-full px-40 h-screen justify-center items-center'>
+		<div className='flex w-full pl-48 h-screen justify-center items-center'>
 			<div className='flex w-1/3 justify-center'>
 				<LoginForm />
 			</div>

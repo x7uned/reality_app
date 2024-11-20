@@ -1,6 +1,6 @@
-import { IconType } from '@/app/space/[id]/page'
 import { fetchGetSpaces } from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
+import { IconType } from '@/types/space'
 import {
 	createContext,
 	ReactNode,
@@ -9,10 +9,11 @@ import {
 	useState,
 } from 'react'
 
-interface SpaceMini {
+export interface SpaceMini {
 	id: number
 	name: string
 	icon: IconType
+	updatedAt: Date
 }
 
 interface SpaceContextType {

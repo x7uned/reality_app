@@ -47,7 +47,7 @@ const LoginForm = () => {
 
 			if (!result?.error) {
 				localStorage.setItem('notification', '')
-				router.push('/')
+				router.push('/dashboard')
 			}
 		} catch (error) {
 			console.error('Sign up failed:', error)

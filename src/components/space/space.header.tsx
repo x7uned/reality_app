@@ -1,4 +1,4 @@
-import { ElemType, IconType, Space } from '@/app/space/[id]/page'
+import { ElemType, IconType, Space } from '@/types/space'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'

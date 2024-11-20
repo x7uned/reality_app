@@ -1,7 +1,7 @@
-import type { Metadata } from 'next'
-import { DM_Sans } from '@next/font/google'
-import './globals.css'
 import GlobalLayout from '@/components/layouts/global.layout'
+import type { Metadata } from 'next'
+import { DM_Sans } from 'next/font/google'
+import './globals.css'
 
 export const metadata: Metadata = {
 	title: 'Reality',

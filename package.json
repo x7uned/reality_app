@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
-		"@next/font": "^14.2.15",
 		"@reduxjs/toolkit": "^2.2.8",
 		"axios": "^1.7.7",
 		"dotenv": "^16.4.5",

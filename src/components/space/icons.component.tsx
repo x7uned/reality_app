@@ -1,4 +1,4 @@
-import { IconType } from '@/app/space/[id]/page'
+import { IconType } from '@/types/space'
 import { FaSpaceAwesome } from 'react-icons/fa6'
 import { IoAccessibility } from 'react-icons/io5'
 import { LuFile } from 'react-icons/lu'

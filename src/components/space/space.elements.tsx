@@ -1,6 +1,6 @@
 'use client'
 
-import { Element, ElemType } from '@/app/space/[id]/page'
+import { Element, ElemType } from '@/types/space'
 import { Reorder } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
@@ -255,7 +255,7 @@ const SpaceElements = ({
 				<div
 					onMouseDown={e => {
 						e.preventDefault()
-						applyStyle('italic')
+						applyStyle('underline')
 					}}
 					className='flex hover:bg-bg2 hover:shadow justify-center items-center duration-150 cursor-pointer h-8 w-8 rounded-md transition-all'
 				>

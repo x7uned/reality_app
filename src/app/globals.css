@@ -60,6 +60,46 @@ body {
 	border-color: (--border);
 }
 
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+.background-effect {
+	position: absolute;
+	width: 150%;
+	height: 150%;
+	background: radial-gradient(
+		circle,
+		rgba(67, 67, 255, 0.5),
+		rgba(0, 0, 0, 0) 70%
+	);
+	filter: blur(150px);
+	animation: moveGlow 10s infinite alternate;
+}
+
+.background-effect-2 {
+	position: absolute;
+	width: 150%;
+	height: 150%;
+	background: radial-gradient(
+		circle,
+		rgba(67, 0, 255, 0.3),
+		rgba(0, 0, 0, 0) 70%
+	);
+	filter: blur(100px);
+	animation: moveGlow 12s infinite alternate-reverse;
+}
+
+@keyframes moveGlow {
+	0% {
+		transform: translate(-10%, -10%);
+	}
+	100% {
+		transform: translate(10%, 10%);
+	}
+}
+
 .no-outline {
 	outline: none;
 	-moz-outline-style: none;

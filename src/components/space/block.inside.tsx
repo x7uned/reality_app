@@ -1,4 +1,4 @@
-import { Element } from '@/app/space/[id]/page'
+import { Element } from '@/types/space'
 import { useEffect } from 'react'
 import ImageBlock from './image.block'
 
@@ -34,7 +34,7 @@ const BlockSpace = ({
 	switch (elem.type) {
 		case 'h1':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -59,7 +59,7 @@ const BlockSpace = ({
 			)
 		case 'h2':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -80,7 +80,7 @@ const BlockSpace = ({
 			)
 		case 'h3':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -101,7 +101,7 @@ const BlockSpace = ({
 			)
 		case 'h4':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -122,7 +122,7 @@ const BlockSpace = ({
 			)
 		case 'h5':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
@@ -143,13 +143,13 @@ const BlockSpace = ({
 			)
 		case 'list':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div
 						role='textbox'
 						aria-multiline='true'
 						contentEditable={true}
 						suppressContentEditableWarning={true}
-						className='list-item ml-5 no-outline transition-all duration-200 focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 mr-10 rounded-md w-full text-start text-base min-h-8'
+						className='list-item ml-5 no-outline transition-all duration-200 focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1   rounded-md w-full text-start text-base min-h-8'
 						ref={el => {
 							editableRefs.current[index + 1] = el
 							editableRef.current = el
@@ -164,7 +164,7 @@ const BlockSpace = ({
 			)
 		case 'checks':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<input
 						type='checkbox'
 						checked={elem.completed ? true : false}
@@ -176,7 +176,7 @@ const BlockSpace = ({
 						aria-multiline='true'
 						contentEditable={true}
 						suppressContentEditableWarning={true}
-						className='no-outline transition-all duration-200 focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1 mr-10 rounded-md w-full text-start text-base min-h-8'
+						className='no-outline transition-all duration-200 focus:shadow dark:shadow-none bg-bg editable placeholder dark:focus:bg-bg px-2 py-1 pt-1 pl-1   rounded-md w-full text-start text-base min-h-8'
 						ref={el => {
 							editableRefs.current[index + 1] = el
 							editableRef.current = el
@@ -192,7 +192,7 @@ const BlockSpace = ({
 			)
 		case 'nums':
 			return (
-				<div className='flex w-2/3 mr-10'>
+				<div className='flex w-2/3  '>
 					<div className='flex flex-col'>
 						{/* Рендеринг номеров строк */}
 						<div className='flex flex-col items-end pt-1'>

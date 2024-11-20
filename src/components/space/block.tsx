@@ -1,8 +1,8 @@
 'use client'
 
-import { Element, ElemType } from '@/app/space/[id]/page'
 import { fetchUploadImage } from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
+import { Element, ElemType } from '@/types/space'
 import {
 	AnimatePresence,
 	motion,

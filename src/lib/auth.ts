@@ -1,7 +1,7 @@
 import { AuthOptions, Session, User } from 'next-auth'
-import axiosInstance from './axios'
-import Credentials from 'next-auth/providers/credentials'
 import { JWT } from 'next-auth/jwt'
+import Credentials from 'next-auth/providers/credentials'
+import axiosInstance from './axios'
 
 export const authOptions: AuthOptions = {
 	providers: [

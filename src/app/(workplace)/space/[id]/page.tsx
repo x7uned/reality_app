@@ -11,39 +11,9 @@ import {
 	fetchSaveSpace,
 } from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
+import { Element, ElemType, IconType, Space } from '@/types/space'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-
-export interface Space {
-	id: number
-	background: string
-	name: string
-	elements: Element[]
-	icon: IconType
-}
-
-export type ElemType =
-	| 'h1'
-	| 'h2'
-	| 'h3'
-	| 'h4'
-	| 'h5'
-	| 'list'
-	| 'checks'
-	| 'nums'
-	| 'img'
-
-export type IconType = 'default' | 'rocket' | 'body' | 'bolt' | 'heart'
-
-export interface Element {
-	id: number
-	type: ElemType
-	content: string
-	completed?: boolean
-	textAlign?: 'left' | 'center' | 'right'
-	width?: number
-	height?: number
-}
 
 const SpacePage = () => {
 	const dispatch = useAppDispatch()
@@ -77,7 +47,7 @@ const SpacePage = () => {
 		try {
 			const fetch = await dispatch(fetchDeleteSpace(space.id))
 			if (fetch?.payload.success) {
-				router.push('/')
+				router.push('/dashboard')
 			} else {
 				return false
 			}
@@ -236,7 +206,7 @@ const SpacePage = () => {
 	}
 
 	return (
-		<div className='flex'>
+		<div className='flex pl-48'>
 			<SpaceHeader
 				handleDeleteSpace={handleDeleteSpace}
 				canDraw={canDraw}

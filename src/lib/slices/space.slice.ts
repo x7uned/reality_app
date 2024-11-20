@@ -1,9 +1,9 @@
-import { Space } from '@/app/space/[id]/page'
+import { Space } from '@/types/space'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { default as axiosInstance } from '../axios'
 
 const initialState = {
-	user: null,
+	space: null,
 }
 
 const spaceSlice = createSlice({
