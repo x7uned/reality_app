@@ -3,15 +3,23 @@
 import EventsCalendar from '@/components/calendar/events.calendar'
 import MonthCalendar from '@/components/calendar/month.calendar'
 import { useSpaces } from '@/components/contexts/spaces.context'
-import { fetchGetCalendar } from '@/lib/slices/calendar.slice'
+import { fetchGetCalendar, fetchGetEvents } from '@/lib/slices/calendar.slice'
 import { useAppDispatch } from '@/lib/store'
+import { CalendarDay, CalendarEvent } from '@/types/calendar'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { MdKeyboardArrowRight, MdOutlineHome } from 'react-icons/md'
 
+export interface Events {
+	today: CalendarEvent[]
+	tomorrow: CalendarEvent[]
+	week: CalendarEvent[]
+}
+
 const Dashboard = () => {
 	const { fetchSpacesData } = useSpaces()
-	const [calendar, setCalendar] = useState([])
+	const [calendar, setCalendar] = useState<CalendarDay[]>([])
+	const [events, setEvents] = useState<Events>()
 	const [gap, setGap] = useState<number>(0)
 	const { status } = useSession()
 	const dispatch = useAppDispatch()
@@ -21,6 +29,26 @@ const Dashboard = () => {
 			setGap(prev => prev + 1)
 		} else {
 			setGap(prev => prev - 1)
+		}
+	}
+
+	const fetchEvents = async () => {
+		try {
+			if (status == 'authenticated') {
+				console.log('fetch')
+				const date = new Date()
+				date.setMonth(date.getMonth() + gap)
+				const data = `${date.getFullYear()}-${
+					date.getMonth() + 1
+				}-${date.getDate()}`
+
+				const fetch = await dispatch(fetchGetEvents(data))
+				if (fetch.payload.success) {
+					setEvents(fetch.payload.events)
+				}
+			}
+		} catch (error) {
+			console.error(error)
 		}
 	}
 
@@ -35,7 +63,6 @@ const Dashboard = () => {
 				}-${date.getDate()}`
 
 				const fetch = await dispatch(fetchGetCalendar(data))
-				console.log(fetch)
 				if (fetch.payload.success && fetch.payload.data) {
 					setCalendar(fetch.payload.data)
 				}
@@ -51,6 +78,7 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		fetchSpacesData()
+		fetchEvents()
 	}, [])
 
 	return (
@@ -82,7 +110,7 @@ const Dashboard = () => {
 					<div className='flex flex-col justify-start items-start w-2/5 h-full gap-1'>
 						<p className='w-full text-2xl font-bold'>Events</p>
 						<div className='border-b border-border w-full'></div>
-						<EventsCalendar />
+						<EventsCalendar events={events} />
 					</div>
 				</div>
 			</div>

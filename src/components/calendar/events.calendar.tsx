@@ -1,13 +1,24 @@
 'use client'
 
+import { Events } from '@/app/(workplace)/dashboard/page'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { MdKeyboardArrowRight } from 'react-icons/md'
+import EventBlock from './blocks/event.calendar'
 
-const EventsCalendar = () => {
+interface EventsCalendarProps {
+	events: Events | undefined
+}
+
+const EventsCalendar = ({ events }: EventsCalendarProps) => {
 	const [todayMenu, setTodayMenu] = useState(false)
-	const [tommorowMenu, setTommorowMenu] = useState(false)
+	const [tomorrowMenu, setTomorrowMenu] = useState(false)
 	const [nextWeekMenu, setNextWeekMenu] = useState(false)
+	const [category, setCategory] = useState<string>()
+
+	if (!events) {
+		return
+	}
 
 	return (
 		<>
@@ -28,36 +39,36 @@ const EventsCalendar = () => {
 					initial={{ height: 0 }}
 					animate={{ height: 'auto' }}
 					exit={{ height: 0 }}
-					transition={{ duration: 0.1, ease: 'easeInOut' }}
+					transition={{ duration: 0.05, ease: 'easeInOut' }}
 					className='flex flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					<p>Hehe</p>
-					<p>Additional content</p>
+					{Array.isArray(events.today) &&
+						events.today.map(e => <EventBlock event={e} key={e.id} />)}
 				</motion.div>
 			)}
 			<div className='border-b border-border w-full'></div>
 			<div
-				onClick={() => setTommorowMenu(prev => !prev)}
+				onClick={() => setTomorrowMenu(prev => !prev)}
 				className={`flex items-center cursor-pointer`}
 			>
 				<MdKeyboardArrowRight
 					className={`${
-						tommorowMenu ? 'rotate-90' : ''
+						tomorrowMenu ? 'rotate-90' : ''
 					} transition-all duration-200`}
 					size='20px'
 				/>
-				<p className='select-none'>Tommorow</p>
+				<p className='select-none'>Tomorrow</p>
 			</div>
-			{tommorowMenu && (
+			{tomorrowMenu && (
 				<motion.div
 					initial={{ height: 0 }}
 					animate={{ height: 'auto' }}
 					exit={{ height: 0 }}
-					transition={{ duration: 0.1, ease: 'easeInOut' }}
-					className='flex flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
+					transition={{ duration: 0.05, ease: 'easeInOut' }}
+					className='list-disc flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					<p>Hehe</p>
-					<p>Additional content</p>
+					{Array.isArray(events.tomorrow) &&
+						events.tomorrow.map(e => <EventBlock event={e} key={e.id} />)}
 				</motion.div>
 			)}
 			<div className='border-b border-border w-full'></div>
@@ -78,11 +89,11 @@ const EventsCalendar = () => {
 					initial={{ height: 0 }}
 					animate={{ height: 'auto' }}
 					exit={{ height: 0 }}
-					transition={{ duration: 0.1, ease: 'easeInOut' }}
+					transition={{ duration: 0.05, ease: 'easeInOut' }}
 					className='flex flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					<p>Hehe</p>
-					<p>Additional content</p>
+					{Array.isArray(events.week) &&
+						events.week.map(e => <EventBlock event={e} key={e.id} />)}
 				</motion.div>
 			)}
 		</>

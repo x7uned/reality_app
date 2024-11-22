@@ -11,7 +11,7 @@ const getBlockStyle = (style: CalendarBlockStyle) => {
 	}
 }
 
-const getTypeStyle = (style: CalendarBlockStyle) => {
+export const getTypeStyle = (style: CalendarBlockStyle) => {
 	switch (style) {
 		case 'purple':
 			return 'bg-[#c3b0ff] dark:bg-[#8560ff]'

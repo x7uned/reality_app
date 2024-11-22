@@ -11,6 +11,18 @@ const spaceSlice = createSlice({
 	reducers: {},
 })
 
+export const fetchGetEvents = createAsyncThunk(
+	'calendar/fetchGetEvents',
+	async (date: string) => {
+		try {
+			const response = await axiosInstance.get(`calendar/events?date=${date}`)
+			return response.data
+		} catch (error) {
+			console.error('Something went wrong', error)
+		}
+	}
+)
+
 export const fetchGetCalendar = createAsyncThunk(
 	'calendar/fetchGetCalendar',
 	async (date: string) => {
