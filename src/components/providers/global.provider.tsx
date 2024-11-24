@@ -5,7 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { SpaceProvider } from '../contexts/spaces.context'
+import { SpaceProvider } from '../contexts/data.context'
 
 const GlobalProvider = ({
 	children,

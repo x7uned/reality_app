@@ -1,5 +1,7 @@
+import { fetchGetCategories } from '@/lib/slices/calendar.slice'
 import { fetchGetSpaces } from '@/lib/slices/space.slice'
 import { useAppDispatch } from '@/lib/store'
+import { CalendarCategory } from '@/types/calendar'
 import { IconType } from '@/types/space'
 import {
 	createContext,
@@ -19,20 +21,41 @@ export interface SpaceMini {
 interface SpaceContextType {
 	spaces: SpaceMini[]
 	fetchSpacesData: () => void
+	fetchCategoriesData: () => void
+	categories: CalendarCategory[]
+	refreshData: () => void
 }
 
 interface SpaceProviderProps {
 	children: ReactNode
 }
 
-const SpaceContext = createContext<SpaceContextType | undefined>(undefined)
+const DataContext = createContext<SpaceContextType | undefined>(undefined)
 
 export const SpaceProvider: React.FC<SpaceProviderProps> = ({ children }) => {
 	const dispatch = useAppDispatch()
 	const [spaces, setSpaces] = useState<SpaceMini[]>([])
+	const [categories, setCategories] = useState<CalendarCategory[]>([])
+
+	const refreshData = async () => {
+		await fetchSpacesData()
+		await fetchCategoriesData()
+	}
+
+	const fetchCategoriesData = async () => {
+		try {
+			const fetch = await dispatch(fetchGetCategories())
+			if (fetch.payload.categories) {
+				setCategories(fetch.payload.categories || [])
+			}
+		} catch (error) {
+			console.error('Error fetching categories:', error)
+		}
+	}
 
 	const fetchSpacesData = async () => {
 		try {
+			console.log('fetching spaces')
 			const fetch = await dispatch(fetchGetSpaces())
 			if (fetch.payload.spaces) {
 				setSpaces(fetch.payload.spaces || [])
@@ -44,17 +67,26 @@ export const SpaceProvider: React.FC<SpaceProviderProps> = ({ children }) => {
 
 	useEffect(() => {
 		fetchSpacesData()
+		fetchCategoriesData()
 	}, [])
 
 	return (
-		<SpaceContext.Provider value={{ spaces, fetchSpacesData }}>
+		<DataContext.Provider
+			value={{
+				spaces,
+				fetchSpacesData,
+				fetchCategoriesData,
+				categories,
+				refreshData,
+			}}
+		>
 			{children}
-		</SpaceContext.Provider>
+		</DataContext.Provider>
 	)
 }
 
-export const useSpaces = (): SpaceContextType => {
-	const context = useContext(SpaceContext)
+export const useData = (): SpaceContextType => {
+	const context = useContext(DataContext)
 	if (!context) {
 		throw new Error('useSpaces must be used within a SpaceProvider')
 	}

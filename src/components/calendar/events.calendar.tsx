@@ -8,13 +8,13 @@ import EventBlock from './blocks/event.calendar'
 
 interface EventsCalendarProps {
 	events: Events | undefined
+	refreshData: () => void
 }
 
-const EventsCalendar = ({ events }: EventsCalendarProps) => {
+const EventsCalendar = ({ events, refreshData }: EventsCalendarProps) => {
 	const [todayMenu, setTodayMenu] = useState(false)
 	const [tomorrowMenu, setTomorrowMenu] = useState(false)
 	const [nextWeekMenu, setNextWeekMenu] = useState(false)
-	const [category, setCategory] = useState<string>()
 
 	if (!events) {
 		return
@@ -42,8 +42,13 @@ const EventsCalendar = ({ events }: EventsCalendarProps) => {
 					transition={{ duration: 0.05, ease: 'easeInOut' }}
 					className='flex flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					{Array.isArray(events.today) &&
-						events.today.map(e => <EventBlock event={e} key={e.id} />)}
+					{Array.isArray(events.today) && events.today.length !== 0 ? (
+						events.today.map(e => (
+							<EventBlock refreshData={refreshData} event={e} key={e.id} />
+						))
+					) : (
+						<p className='text-subtext'>No events today</p>
+					)}
 				</motion.div>
 			)}
 			<div className='border-b border-border w-full'></div>
@@ -67,8 +72,13 @@ const EventsCalendar = ({ events }: EventsCalendarProps) => {
 					transition={{ duration: 0.05, ease: 'easeInOut' }}
 					className='list-disc flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					{Array.isArray(events.tomorrow) &&
-						events.tomorrow.map(e => <EventBlock event={e} key={e.id} />)}
+					{Array.isArray(events.tomorrow) && events.tomorrow.length !== 0 ? (
+						events.tomorrow.map(e => (
+							<EventBlock refreshData={refreshData} event={e} key={e.id} />
+						))
+					) : (
+						<p className='text-subtext'>No events tomorrow</p>
+					)}
 				</motion.div>
 			)}
 			<div className='border-b border-border w-full'></div>
@@ -92,8 +102,13 @@ const EventsCalendar = ({ events }: EventsCalendarProps) => {
 					transition={{ duration: 0.05, ease: 'easeInOut' }}
 					className='flex flex-col gap-1 py-1 w-full settings-menu overflow-hidden'
 				>
-					{Array.isArray(events.week) &&
-						events.week.map(e => <EventBlock event={e} key={e.id} />)}
+					{Array.isArray(events.week) && events.week.length !== 0 ? (
+						events.week.map(e => (
+							<EventBlock refreshData={refreshData} event={e} key={e.id} />
+						))
+					) : (
+						<p className='text-subtext'>No events week</p>
+					)}
 				</motion.div>
 			)}
 		</>

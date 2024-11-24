@@ -2,13 +2,20 @@
 
 import EventsCalendar from '@/components/calendar/events.calendar'
 import MonthCalendar from '@/components/calendar/month.calendar'
-import { useSpaces } from '@/components/contexts/spaces.context'
+import { useData } from '@/components/contexts/data.context'
+import EventCreateForm from '@/components/forms/event.create.form'
+import Modal from '@/components/modal'
 import { fetchGetCalendar, fetchGetEvents } from '@/lib/slices/calendar.slice'
 import { useAppDispatch } from '@/lib/store'
 import { CalendarDay, CalendarEvent } from '@/types/calendar'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { MdKeyboardArrowRight, MdOutlineHome } from 'react-icons/md'
+import {
+	MdAddCircleOutline,
+	MdKeyboardArrowRight,
+	MdOutlineHome,
+} from 'react-icons/md'
 
 export interface Events {
 	today: CalendarEvent[]
@@ -17,9 +24,10 @@ export interface Events {
 }
 
 const Dashboard = () => {
-	const { fetchSpacesData } = useSpaces()
+	const { fetchSpacesData, fetchCategoriesData } = useData()
 	const [calendar, setCalendar] = useState<CalendarDay[]>([])
 	const [events, setEvents] = useState<Events>()
+	const [createEventModal, setCreateEventModal] = useState<boolean>(false)
 	const [gap, setGap] = useState<number>(0)
 	const { status } = useSession()
 	const dispatch = useAppDispatch()
@@ -76,16 +84,32 @@ const Dashboard = () => {
 		fetchCalendar()
 	}, [gap])
 
-	useEffect(() => {
+	const refreshData = async () => {
 		fetchSpacesData()
+		fetchCategoriesData()
 		fetchEvents()
+		fetchCalendar()
+	}
+
+	useEffect(() => {
+		refreshData()
 	}, [])
+
+	if (status == 'loading') {
+		return (
+			<div className='flex justify-center items-center h-screen w-full'>
+				<p>Loading...</p>
+			</div>
+		)
+	}
 
 	return (
 		<div className='flex py-3 pl-60 pr-12 w-full h-screen justify-center items-center'>
 			<div className='flex flex-col px-1 gap-1 h-full w-full'>
 				<div className='flex mt-3 items-center gap-1 text-subtext'>
-					<MdOutlineHome size={'26px'} />
+					<Link href='/'>
+						<MdOutlineHome size={'26px'} />
+					</Link>
 					<MdKeyboardArrowRight size={'18px'} />
 					<p className='font-medium text-sm'>Dashboard</p>
 				</div>
@@ -108,9 +132,22 @@ const Dashboard = () => {
 						)}
 					</div>
 					<div className='flex flex-col justify-start items-start w-2/5 h-full gap-1'>
-						<p className='w-full text-2xl font-bold'>Events</p>
+						<div className='flex items-center'>
+							<p className='w-full text-2xl font-bold'>Events</p>
+							<MdAddCircleOutline
+								onClick={() => setCreateEventModal(true)}
+								className='text-subtext cursor-pointer'
+								size={30}
+							/>
+							<Modal isOpen={createEventModal} onClose={setCreateEventModal}>
+								<EventCreateForm
+									refreshData={refreshData}
+									setCreateEventModal={setCreateEventModal}
+								/>
+							</Modal>
+						</div>
 						<div className='border-b border-border w-full'></div>
-						<EventsCalendar events={events} />
+						<EventsCalendar refreshData={refreshData} events={events} />
 					</div>
 				</div>
 			</div>

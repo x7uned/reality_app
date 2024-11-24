@@ -13,7 +13,7 @@ import {
 import { MdDeleteOutline } from 'react-icons/md'
 import { RiDeleteBinLine, RiEraserLine } from 'react-icons/ri'
 import { TbBrush } from 'react-icons/tb'
-import { useSpaces } from '../contexts/spaces.context'
+import { useData } from '../contexts/data.context'
 import IconsComponent from './icons.component'
 
 interface SpaceHeaderProps {
@@ -47,7 +47,7 @@ const SpaceHeader = ({
 	space,
 	handleChangeIcon,
 }: SpaceHeaderProps) => {
-	const { fetchSpacesData } = useSpaces()
+	const { fetchSpacesData } = useData()
 	const [picker, setPicker] = useState(false)
 	const [iconMenu, setIconMenu] = useState(false)
 

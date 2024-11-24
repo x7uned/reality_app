@@ -6,6 +6,10 @@ const getBlockStyle = (style: CalendarBlockStyle) => {
 			return 'bg-[#e1d8ff] dark:bg-[#3c3553]'
 		case 'red':
 			return 'bg-[#ffd1d1] dark:bg-[#533535]'
+		case 'ocean':
+			return 'bg-[#d2e3ff] dark:bg-[#355153]'
+		case 'green':
+			return 'bg-[#dfffd0] dark:bg-[#3d5234]'
 		default:
 			return 'bg-[#dbdbdb] dark:bg-[#242424]'
 	}
@@ -17,6 +21,10 @@ export const getTypeStyle = (style: CalendarBlockStyle) => {
 			return 'bg-[#c3b0ff] dark:bg-[#8560ff]'
 		case 'red':
 			return 'bg-[#ffb0b0] dark:bg-[#913939]'
+		case 'ocean':
+			return 'bg-[#afd2ff] dark:bg-[#379291]'
+		case 'green':
+			return 'bg-[#caffaf] dark:bg-[#5c9137]'
 		default:
 			return 'bg-[#c3b0ff] dark:bg-[#404040]'
 	}

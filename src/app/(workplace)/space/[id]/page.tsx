@@ -2,7 +2,7 @@
 'use client'
 
 import CanvasBackground from '@/components/canvas.component'
-import { useSpaces } from '@/components/contexts/spaces.context'
+import { useData } from '@/components/contexts/data.context'
 import SpaceElements from '@/components/space/space.elements'
 import SpaceHeader from '@/components/space/space.header'
 import {
@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from 'react'
 const SpacePage = () => {
 	const dispatch = useAppDispatch()
 	const router = useRouter()
-	const { fetchSpacesData } = useSpaces()
+	const { fetchSpacesData } = useData()
 	const params = useParams<{ id: string }>()
 	const [canDraw, setCanDraw] = useState(false)
 	const [color, setColor] = useState('#6e62e5')

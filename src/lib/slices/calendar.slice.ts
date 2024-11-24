@@ -11,6 +11,49 @@ const spaceSlice = createSlice({
 	reducers: {},
 })
 
+export const fetchGetCategories = createAsyncThunk(
+	'calendar/fetchGetCategories',
+	async () => {
+		try {
+			const response = await axiosInstance.get(`calendar/categories`)
+			return response.data
+		} catch (error) {
+			console.error('Something went wrong', error)
+		}
+	}
+)
+
+interface fetchCreateEventProps {
+	content: string
+	subContent: string
+	categoryId: number
+	date: string
+}
+
+export const fetchCreateEvent = createAsyncThunk(
+	'calendar/fetchCreateEvent',
+	async (data: fetchCreateEventProps) => {
+		try {
+			const response = await axiosInstance.post(`calendar/event`, data)
+			return response.data
+		} catch (error) {
+			console.error('Something went wrong', error)
+		}
+	}
+)
+
+export const fetchDeleteEvent = createAsyncThunk(
+	'calendar/fetchDeleteEvent',
+	async (id: number) => {
+		try {
+			const response = await axiosInstance.delete(`calendar/event?id=${id}`)
+			return response.data
+		} catch (error) {
+			console.error('Something went wrong', error)
+		}
+	}
+)
+
 export const fetchGetEvents = createAsyncThunk(
 	'calendar/fetchGetEvents',
 	async (date: string) => {

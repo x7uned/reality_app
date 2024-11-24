@@ -1,6 +1,6 @@
 'use client'
 
-import { useSpaces } from '@/components/contexts/spaces.context'
+import { useData } from '@/components/contexts/data.context'
 import IconsComponent from '@/components/space/icons.component'
 import ThemeChangeComponent from '@/components/theme.component'
 import { fetchCreateSpace } from '@/lib/slices/space.slice'
@@ -20,7 +20,7 @@ const Header = () => {
 	const page = usePathname()
 	const router = useRouter()
 	const dispatch = useAppDispatch()
-	const { spaces, fetchSpacesData } = useSpaces()
+	const { spaces, fetchSpacesData } = useData()
 	const { data: session, status } = useSession()
 
 	const handleCreateNewSpace = async () => {

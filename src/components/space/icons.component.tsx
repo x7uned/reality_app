@@ -14,42 +14,42 @@ const IconsComponent = ({ icon, active }: Props) => {
 		case 'default':
 			return (
 				<LuFile
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)
 		case 'rocket':
 			return (
 				<FaSpaceAwesome
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)
 		case 'body':
 			return (
 				<IoAccessibility
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)
 		case 'bolt':
 			return (
 				<MdBolt
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)
 		case 'heart':
 			return (
 				<MdFavoriteBorder
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)
 		default:
 			return (
 				<LuFile
-					className={active ? 'text-second' : 'text-white'}
+					className={active ? 'text-second' : 'text-black dark:text-white'}
 					size={'20px'}
 				/>
 			)

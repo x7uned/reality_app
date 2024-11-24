@@ -1,6 +1,11 @@
 import { User } from 'next-auth'
 
-export type CalendarBlockStyle = 'purple' | 'red' | 'default'
+export type CalendarBlockStyle =
+	| 'purple'
+	| 'red'
+	| 'ocean'
+	| 'green'
+	| 'default'
 export type CalendarBlockType = 'event'
 
 export interface CalendarDay {
